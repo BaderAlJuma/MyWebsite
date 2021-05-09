@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bader's Website</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+
+        <div class="container p-0">
+
+            <div class="jumbotron text-md-left rounded-0 mb-0" >
+                <h1>Bader's Website</h1>
+                <p id="quote">&nbsp;"Cogito, ergo sum."<p/>
+            </div>
+            <nav class="navbar navbar-expand-sm navbar-dark rounded-bottom">
+                <a class="navbar-brand" href="index.html">Home</a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href='' onclick="newTab()">Resume</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Research</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Fun Side Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Writing</a>
+                        </li>
+
+                    </ul>
+                    <ul id="reg" class='navbar-nav'>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Register</a>
+                        </li> 
+                    </ul>
+                </div>  
+            </nav>
+            <script>
+                function newTab() {
+                    window.open("CV2.pdf");
+                }
+            </script>
+
+            <div class="container pt-5 pb-5" id="core">
+            
+                <h1>Who am I?</h1>
+            
+                <p>
+                    Bismillah ar-Rahman ar-Rahim,
+                </p>
+                <p>
+                    My name is Bader Al-Jumah. I'm a computer science graduate living in Kuwait. I'm
+                    mainly interested in Cybersecurity and Machine Learning,
+                    and am in the process of learning about them as of now.
+                    I like dabbling with small projects as I learn, as well
+                    as participating in research whenever I can.
+                </p>
+            
+            </div>
+        </div>
+
+    </body>
+</html>

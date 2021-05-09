@@ -1,0 +1,45 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Apr 9, 2019, 11:52:09 AM
+    Author     : morpheous
+*/
+
+nav {
+    background-color: black;
+}
+footer {
+    background-color: grey;
+}
+nav-link {
+    background-color: black;
+}
+hr {
+    width: 100%;
+    color: black !important;
+}
+.car{
+    font-weight: bold;
+}
+.jumbotron.text-md-left{
+  background-image: url("p.jpg");
+  background-size: cover;
+  color: white;
+      
+}
+.container {
+    background-color: white;
+       
+}
+#reg {
+    font-weight: bold;
+    font-style: italic;
+    border: solid;
+    border-radius: 10px;
+}
+#quote {
+    font-style: italic;
+}
