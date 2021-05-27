@@ -18,6 +18,7 @@
 
         workerTag.innerHTML = initialWorker;
         foodTag.innerHTML = initialFood;
+        
         window.addEventListener("keypress", resolveKey);
         function updateWorker(){
             workerTag.innerHTML = workerCount;
@@ -33,14 +34,12 @@
             }
         }
         function pauseToggle(){
-            if (paused){
-                paused = false;
-                time = setInterval(worldClock, 1000);
-            }
-            else{
+            
                 paused = true; 
                 clearInterval(time);
-            }
+                alert('Game Paused');
+                paused = false;
+                time = setInterval(worldClock, 1000);
         }
         function makeWorker(){
             workerCount++;
