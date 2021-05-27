@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <body>
+       <ul>
+           <li>Workers: <span id='workers'></span></li>
+           <li>Food: <span id='food'></span></li>
+       </ul>
+    </body>
+    <script>
+        var workerTag = document.getElementById("workers");
+        var foodTag = document.getElementById("food");
+        var workerCount = 0;
+        var foodCount = 0;
+        var initialFood = 0; 
+        var initialWorker = 0;
+        var paused = false;
+        var time = setInterval(worldClock, 1000);
+
+        workerTag.innerHTML = initialWorker;
+        foodTag.innerHTML = initialFood;
+        window.addEventListener("keypress", resolveKey);
+        function updateWorker(){
+            workerTag.innerHTML = workerCount;
+        }
+        function updateFood(){
+            foodTag.innerHTML = foodCount;
+        }
+        function resolveKey(){
+            switch (event.key){
+                case 'w': makeWorker(); break;
+                case 'f': makeFood(); break;
+                case 'p': pauseToggle(); break;
+            }
+        }
+        function pauseToggle(){
+            if (paused){
+                paused = false;
+                time = setInterval(worldClock, 1000);
+            }
+            else{
+                paused = true; 
+                clearInterval(time);
+            }
+        }
+        function makeWorker(){
+            workerCount++;
+            updateWorker();
+        }
+        function makeFood(){
+            foodCount++;
+            updateFood();
+        }
+        function worldClock(){
+            consumeFood();
+
+        }
+        function consumeFood(){
+            foodCount = foodCount - workerCount;
+            updateFood();
+        }
+
+    </script>
+</html>
