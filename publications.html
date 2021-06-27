@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bader's Website</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+
+        <div class="container p-0">
+
+            <div class="jumbotron text-md-left rounded-0 mb-0" >
+                <h1>Bader's Website</h1>
+                <p id="quote">&nbsp;"Cogito, ergo sum."<p/>
+            </div>
+            <nav class="navbar navbar-expand-sm navbar-dark rounded-bottom">
+                <a class="navbar-brand" href="index.html">Home</a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href='' onclick="newTab()">Resume/CV</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="publications.html">Research</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="projects.html">My Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="" onclick="newTab2()">Sim Game</a>
+                        </li>
+
+                    </ul>
+                    <!--<ul id="reg" class='navbar-nav'>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Register</a>
+                        </li> 
+                    </ul>-->
+                </div>  
+            </nav>
+            <script>
+                function newTab() {
+                    window.open("CV2.pdf");
+                }
+                function newTab2()  {
+                    window.open("game.html");
+                }
+                function newTab3()  {
+                    window.open("Enhancing The User Experience of Interior Design (New).pdf");
+                }
+            </script>
+        <div class="container pt-3 pl-5 pr-5" id="core">
+            <p>This page contains all my research projects with links to view each research paper.</p>
+            <div class="media">
+                <!--<img src="far.png" class="align-self-start mr-3" style="width:160px"> -->
+                <div class="media-body">
+                    <h2>Enhancing The User Experience of Interior Design Mobile Augmented Reality
+                        Applications</h2>
+                    <h5>Authors: Ayman Kandil, Prof. Iyad Abu Doush, Bader Al-Juma</h5>
+                    <a href='' onclick="newTab3()">Paper</a>
+                    <p><div style="font-weight: bold;">Abstract: </div>Intuitive user interface design is of utmost importance to mobile applications, especially when dealing with newer technologies like Augmented Reality (AR). With AR there is room for more innovation in the smartphone's user experience as the technology is just beginning to take off with more devices offering AR support. We find new ways to simplify and stream-line AR applications’ user experience by creating a prototype 3D furniture arrangement application and improving it through users’ feedback. The results show that small changes to the user interface and applying conventional mobile design principles found in other AR and non-AR applications improves the user experience. Our approach is based on simplifying the design by applying the tried and true concept of “less is more”.
+                    </p>
+                </div>
+            </div>
+           
+            
+        </div>
+        <hr>
+    </div>
+    </div>
+</body>
+
+</html>

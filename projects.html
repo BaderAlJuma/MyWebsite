@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bader's Website</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+
+        <div class="container p-0">
+
+            <div class="jumbotron text-md-left rounded-0 mb-0" >
+                <h1>Bader's Website</h1>
+                <p id="quote">&nbsp;"Cogito, ergo sum."<p/>
+            </div>
+            <nav class="navbar navbar-expand-sm navbar-dark rounded-bottom">
+                <a class="navbar-brand" href="index.html">Home</a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href='' onclick="newTab()">Resume/CV</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="publications.html">Research</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="projects.html">My Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="" onclick="newTab2()">Sim Game</a>
+                        </li>
+
+                    </ul>
+                    <!--<ul id="reg" class='navbar-nav'>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Register</a>
+                        </li> 
+                    </ul>-->
+                </div>  
+            </nav>
+            <script>
+                function newTab() {
+                    window.open("CV2.pdf");
+                }
+                function newTab2()  {
+                    window.open("game.html");
+                }
+                
+            </script>
+        <div class="container pt-3 pl-5 pr-5" id="core">
+            <p>The following are some of the projects I worked on over the years. I also have a Github account that
+                contains most of the source files of the projects <a href="https://github.com/BaderAlJuma">here.</a></p>
+                <hr>
+            <div class="media">
+                <!--<img src="far.png" class="align-self-start mr-3" style="width:160px"> -->
+                <div class="media-body">
+                    <h4>Furniture Augumented Reality (FAR) App</h4>
+                    <p>This app was made by me and my colleage Ayman Kandil. It's an app that lets users place virtual
+                        3D furniture in real
+                        environments using AR technology. Initially, the app was a project for a college course in which
+                        the professor
+                        of the course was impressed by our work and suggested that we use our app to help create a research
+                        paper titled "Enhancing User Experience of Interior Design Mobile Augmented Reality
+                        Applications" which can be found <a href="publications.html">here.</a>
+                        The paper is submitted to <a href="http://www.chira.scitevents.org">CHIRA</a> and is currently
+                        in review.
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <div class="media row">
+            <div class="col">
+                <img src="far.png" class="img-responsive float-left m-3 row" style="width:250px">
+                <div class="media-body">
+                    <h4>Fitness Hub</h4>
+                    <p class="text-wrap">This app was a capstone/graduation project designed to combine exercising and nutrition with one
+                        app. Users choose exercises based on
+                        specific body parts by clicking on a human diagram. A set of exercises will be displayed for
+                        each body part including information on
+                        how to perform them. There is also a nutrition section where you can choose from select healthy
+                        meals or snacks. Many other small features are
+                        included as well. Initially, the project
+                        included a smartwatch componenet with extra features but was cancelled due to the transition to
+                        online courses during the COVID pandemic.
+                    </p>
+                </div>
+            </div>
+            </div>
+            <hr>
+            <div class="media">
+                <div class="media-body">
+                    <h4>Simulation Game (WIP)</h4>
+                    <p>This is a game with complex real-time events developed using javascript. As of now, the project is 
+                        a work-in-progress. The game can be accessed by clicking "Sim Game" on the navigation bar at the top
+                        of this web page.
+                    </p>
+                </div>
+            </div>
+            <hr>
+            <div class="media">
+                <div class="media-body">
+                    <h4>Salat Times App</h4>
+                    <p>This is a very simple app made using python that calculates prayer times in Kuwait very
+                        accurately
+                        and has an extra feature that lets users choose how many hours they would like to sleep before
+                        Fajr prayer,
+                        then the app will give you the exact time you need to sleep at automatically depending on the
+                        day. The project was
+                        completed within a day.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr>
+    </div>
+    </div>
+</div>
+</body>
+
+</html>
