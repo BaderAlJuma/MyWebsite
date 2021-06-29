@@ -18,53 +18,42 @@
             </table>
           </div>
        <ul>
-
             <li>Available Men: <span id='men'></span></li>
-           <li>Workers: <span id='workers'></span></li>
-           <li>Farmers: <span id='farmers'></span></li>
-           <li>Food: <span id='food'></span></li>
+            <li>Workers: <span id='workers'></span></li>
+            <li>Farmers: <span id='farmers'></span></li>
+            <li>Food: <span id='food'></span></li>
+            <li>Soldiers (I): <span id='soldiers'></span></li>
        </ul>
        <div class="card">
         <div class="card-header font-weight-bold">Event Log</div>
-        <div class="card-body">Info</div> 
+        <div class="card-body">Info</div>
       </div>
     </body>
     <script>
-        var workerTag = document.getElementById("workers");
-        var foodTag = document.getElementById("food");
-        var timeOfDayTag = document.getElementById("timeofday");
-        var weatherTag = document.getElementById("weather");
-        var farmerTag = document.getElementById("farmers");
-        var menTag = document.getElementById("men");
         var workerCount = 0;
         var foodCount = 0;
-        var farmerCount = 0;
+        var farmerCount = 0;        
         var menCount = 10;
-        var initialFood = 0; 
-        var initialWorker = 0;
-        var initialFarmer =0;
+        var soldierCount =0;
+
         var currentTime = 0;
         var paused = false;
         var time = setInterval(worldClock, 1000);
 
-        workerTag.innerHTML = initialWorker;
-        foodTag.innerHTML = initialFood;
-        weatherTag.innerHTML = 'Clear';
-        menTag.innerHTML = menCount;
-        farmerTag.innerHTML = initialFarmer;
+        function tagText(id, inner){
+            document.getElementById(id).innerHTML = inner;
+            
+        }
+        update();
 
         window.addEventListener("keypress", resolveKey);
-        function updateMen(){
-            menTag.innerHTML = menCount;
-        }
-        function updateWorker(){
-            workerTag.innerHTML = workerCount;
-        }
-        function updateFood(){
-            foodTag.innerHTML = foodCount;
-        }
-        function updateFarmer(){
-            farmerTag.innerHTML = farmerCount;
+        function update(){
+            tagText("workers", workerCount);
+            tagText("food", foodCount);
+            tagText("farmers", farmerCount);
+            tagText("men", menCount);
+            tagText("soldiers", soldierCount)
+            tagText("weather", "Clear");
         }
         function resolveKey(){
             switch (event.key){
@@ -73,13 +62,13 @@
                 case 'f': makeFarmer(); break;
                 case 'F': fireFarmer(); break;
                 case 'p': pauseToggle(); break;
+                case 's': makeSoldier(); break;
                 default: beep();
 
             }
         }
         
         function pauseToggle(){
-            
                 paused = true; 
                 clearInterval(time);
                 alert('Game Paused');
@@ -90,23 +79,21 @@
             if (menCount > 0){
             workerCount++;
             menCount--;
-            updateMen();
-            updateWorker();
+            update();
             }
         }
         function makeFarmer(){
             if (menCount > 0){
                 farmerCount++;
                 menCount--;
-                updateMen();
-                updateFarmer(); 
+                update();
             }
             
         }
 
         function produceFood(){
             foodCount = foodCount + farmerCount;
-            updateFood();
+            update();
         }
         function worldClock(){
             passTime();
@@ -115,19 +102,19 @@
         function passTime(){
             
             if (currentTime < 20){
-                timeOfDayTag.innerHTML = "Morning";
+                tagText("timeofday", "Morning");
                 produceFood();
                  
             }
             else if(currentTime >=20 && currentTime < 30){
-                timeOfDayTag.innerHTML = "Afternoon";
+                tagText("timeofday", "Afternoon");
                 consumeFood();
             }
             else if(currentTime >= 30 && currentTime <50){
-                timeOfDayTag.innerHTML = "Evening";
+                tagText("timeofday", "Evening");
             }
             else if(currentTime >= 50 && currentTime <70){
-                timeOfDayTag.innerHTML = "Midnight";
+                tagText("timeofday", "Midnight");
             }
             else{
                 currentTime = 0;
@@ -135,19 +122,19 @@
             currentTime++;
         }
         function consumeFood(){
-            
-            foodCount = foodCount - workerCount;
+            var totalMen = workerCount + farmerCount + menCount + soldierCount;
+            foodCount = foodCount - totalMen*2;
             if (foodCount < 0){
                 foodCount = 0;
             }
-            updateFood();
+            update();
         }
     </script>
     <hr>
         <div class="container pt-3 pl-5 pr-5 ">
             <div>Instructions: </div>
             <div>w = assign worker, f = assign farmer, p = pause game</div>
-            <div style="color: red;">NOTE!! THIS GAME IS MUST BE PLAYED WITH A KEYBOARD. 
+            <div style="color: red;">NOTE!! THIS GAME MUST BE PLAYED WITH A KEYBOARD. 
                 THIS GAME IS ALSO A WORK IN PROGRESS.</div>
         </div>
     
