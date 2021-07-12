@@ -66,7 +66,8 @@
             tagText("food", foodCount);
             tagText("farmers", farmerCount);
             tagText("men", menCount);
-            tagText("soldiers", soldierCount)
+            tagText("soldiers", soldierCount);
+            tagText("trainees", traineeCount);
             tagText("weather", "Clear");
         }
         function resolveKey(){
@@ -96,6 +97,7 @@
             update();
             }
         }
+        
         function makeFarmer(){
             if (menCount > 0){
                 farmerCount++;
@@ -104,14 +106,12 @@
             }  
         }
         function makeSoldier(){
-            if (menCount > 0){
+            if (menCount > 0 && traineeCount == 0){
                 traineeCount++;
                 menCount--;
-                train
+                trainStart=true;
                 update();
-            }  
-            
-            
+            }
 
         }
 
@@ -145,7 +145,12 @@
             }
             if (trainStart){
                 trainTime++;
-                if(trainTime >= 70) trainStart = false;
+                if(trainTime >= 10) {
+                    trainStart = false;
+                    traineeCount--; 
+                    trainTime = 0;
+                    soldierCount++;
+                }
             }
             currentTime++;
         }
