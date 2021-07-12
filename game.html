@@ -17,13 +17,25 @@
                 <th style='text-align: right;'>Season: <span>Autumn</span></th>
             </table>
           </div>
-       <ul>
-            <li>Available Men: <span id='men'></span></li>
-            <li>Workers: <span id='workers'></span></li>
-            <li>Farmers: <span id='farmers'></span></li>
-            <li>Food: <span id='food'></span></li>
-            <li>Soldiers (I): <span id='soldiers'></span></li>
-       </ul>
+          <div class="row">
+            <div class="col">
+                <ul>
+                <li>Available Men: <span id='men'></span></li>
+                <li>Food: <span id='food'></span></li>
+                
+           </ul>
+        </div>
+            <div class="col">
+            <ul>
+                
+                <li>Workers: <span id='workers'></span></li>
+                <li>Farmers: <span id='farmers'></span></li>
+                <li>Soldiers In Training: <span id='trainees'></span></li>
+                <li>Soldiers (I): <span id='soldiers'></span></li>
+            </ul>
+            </div>
+          </div>
+       
        <div class="card">
         <div class="card-header font-weight-bold">Event Log</div>
         <div class="card-body">Info</div>
@@ -35,6 +47,8 @@
         var farmerCount = 0;        
         var menCount = 10;
         var soldierCount =0;
+        var traineeCount =0;
+        var trainTime = 0;
 
         var currentTime = 0;
         var paused = false;
@@ -87,8 +101,18 @@
                 farmerCount++;
                 menCount--;
                 update();
-            }
+            }  
+        }
+        function makeSoldier(){
+            if (menCount > 0){
+                traineeCount++;
+                menCount--;
+                train
+                update();
+            }  
             
+            
+
         }
 
         function produceFood(){
@@ -104,7 +128,7 @@
             if (currentTime < 20){
                 tagText("timeofday", "Morning");
                 produceFood();
-                 
+                
             }
             else if(currentTime >=20 && currentTime < 30){
                 tagText("timeofday", "Afternoon");
@@ -118,6 +142,10 @@
             }
             else{
                 currentTime = 0;
+            }
+            if (trainStart){
+                trainTime++;
+                if(trainTime >= 70) trainStart = false;
             }
             currentTime++;
         }
