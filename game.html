@@ -27,7 +27,6 @@
         </div>
             <div class="col">
             <ul>
-                
                 <li>Workers: <span id='workers'></span></li>
                 <li>Farmers: <span id='farmers'></span></li>
                 <li>Soldiers In Training: <span id='trainees'></span></li>
@@ -52,16 +51,28 @@
 
         var currentTime = 0;
         var paused = false;
-        var time = setInterval(worldClock, 1000);
+        var time = setInterval(theGameLoop, 1000);
+        var time2 = setInterval(updateTag, 1000/60);
 
         function tagText(id, inner){
             document.getElementById(id).innerHTML = inner;
-            
         }
-        update();
 
         window.addEventListener("keypress", resolveKey);
-        function update(){
+        function resolveKey() {
+                switch (event.key) {
+                    case 'w': makeWorker(); break;
+                    case 'W': fireWorker(); break;
+                    case 'f': makeFarmer(); break;
+                    case 'F': removeMan("farmer"); break;
+                    case 'p': pauseToggle(); break;
+                    case 's': makeSoldier(); break;
+                    default: ;
+                }
+            }
+        
+        function updateTag(){
+            
             tagText("workers", workerCount);
             tagText("food", foodCount);
             tagText("farmers", farmerCount);
@@ -69,32 +80,29 @@
             tagText("soldiers", soldierCount);
             tagText("trainees", traineeCount);
             tagText("weather", "Clear");
+            
         }
-        function resolveKey(){
-            switch (event.key){
-                case 'w': makeWorker(); break;
-                case 'W': fireWorker(); break;
-                case 'f': makeFarmer(); break;
-                case 'F': fireFarmer(); break;
-                case 'p': pauseToggle(); break;
-                case 's': makeSoldier(); break;
-                default: beep();
-
-            }
-        }
+        
         
         function pauseToggle(){
                 paused = true; 
                 clearInterval(time);
                 alert('Game Paused');
                 paused = false;
-                time = setInterval(worldClock, 1000);
+                time = setInterval(theGameLoop, 1000);
+        }
+        class Men{
+            constructor(occupation){
+                var alive = true;
+                var healthy = true;
+                
+            }
+
         }
         function makeWorker(){
             if (menCount > 0){
             workerCount++;
             menCount--;
-            update();
             }
         }
         
@@ -102,7 +110,6 @@
             if (menCount > 0){
                 farmerCount++;
                 menCount--;
-                update();
             }  
         }
         function makeSoldier(){
@@ -110,39 +117,46 @@
                 traineeCount++;
                 menCount--;
                 trainStart=true;
-                update();
             }
 
         }
-
+        function removeMan(occupation){
+            if(occupation =="farmer" && farmerCount > 0){
+                farmerCount--;
+                menCount++;
+            }
+            else if(occupation =="worker" && workerCount > 0){
+                workerCount--;
+                menCount++;
+            }
+        }
+        function timeThread(name, rate){
+            setInterval(name, rate);
+        }
         function produceFood(){
             foodCount = foodCount + farmerCount;
-            update();
         }
-        function worldClock(){
-            passTime();
-
-        }
-        function passTime(){
-            
-            if (currentTime < 20){
+        function theGameLoop(){
+            currentTime++;
+            if (currentTime < 20) {
                 tagText("timeofday", "Morning");
                 produceFood();
-                
             }
-            else if(currentTime >=20 && currentTime < 30){
+            else if (currentTime >= 20 && currentTime < 30) {
                 tagText("timeofday", "Afternoon");
                 consumeFood();
             }
-            else if(currentTime >= 30 && currentTime <50){
+            else if (currentTime >= 30 && currentTime < 50) {
                 tagText("timeofday", "Evening");
             }
-            else if(currentTime >= 50 && currentTime <70){
+            else if (currentTime >= 50 && currentTime < 70) {
                 tagText("timeofday", "Midnight");
             }
-            else{
+            else {
                 currentTime = 0;
             }
+        }
+            /*
             if (trainStart){
                 trainTime++;
                 if(trainTime >= 10) {
@@ -151,16 +165,13 @@
                     trainTime = 0;
                     soldierCount++;
                 }
-            }
-            currentTime++;
-        }
+            }*/
         function consumeFood(){
             var totalMen = workerCount + farmerCount + menCount + soldierCount;
             foodCount = foodCount - totalMen*2;
             if (foodCount < 0){
                 foodCount = 0;
             }
-            update();
         }
     </script>
     <hr>
