@@ -37,7 +37,7 @@
        
        <div class="card">
         <div class="card-header font-weight-bold">Event Log</div>
-        <div class="card-body">Info</div>
+        <div class="card-body" id="info"></div>
       </div>
     </body>
     <script>
@@ -51,8 +51,8 @@
 
         var currentTime = 0;
         var paused = false;
-        var time = setInterval(theGameLoop, 1000);
-        var time2 = setInterval(updateTag, 1000/60);
+        var time2 = setInterval(theGameLoop, 1000);
+        var time = setInterval(updateTag, 1000/60);
 
         function tagText(id, inner){
             document.getElementById(id).innerHTML = inner;
@@ -60,36 +60,76 @@
 
         window.addEventListener("keypress", resolveKey);
         function resolveKey() {
-                switch (event.key) {
-                    case 'w': makeWorker(); break;
-                    case 'W': fireWorker(); break;
-                    case 'f': makeFarmer(); break;
-                    case 'F': removeMan("farmer"); break;
-                    case 'p': pauseToggle(); break;
-                    case 's': makeSoldier(); break;
-                    default: ;
-                }
+            switch (event.key) {
+                case 'w': makeWorker(); break;
+                case 'W': fireWorker(); break;
+                case 'f': makeFarmer(); break;
+                case 'F': removeMan("farmer"); break;
+                case 'p': pauseToggle(); break;
+                case 's': makeSoldier(); break;
+                default: ;
             }
-        
+        }
+        var ticks = 0;
+        var now;
+        var worldTime = 0;/*
+        function timer(eventTime){
+
+            var startTime = new Date().getTime();
+            if (new Date().getTime() - startTime >= eventTime){
+                return true;
+                break;
+            }
+        }*/
+
+        var startTime = new Date().getTime();
         function updateTag(){
             
+            if (new Date().getTime() - startTime >= 1000){
+                startTime = new Date().getTime();
+                
+                worldTime++;
+            }
+         
             tagText("workers", workerCount);
             tagText("food", foodCount);
             tagText("farmers", farmerCount);
             tagText("men", menCount);
             tagText("soldiers", soldierCount);
             tagText("trainees", traineeCount);
-            tagText("weather", "Clear");
             
+            tagText("info", worldTime);
+            
+
+            for(i in eventsBag){
+                if (ticks - eventsBag[i].eventTime >= 0){
+                eventsBag[i].func();
+            }
+            }
+            ticks++;
+        }
+        class TimedEvent{
+            constructor(timeInSeconds, func){
+                this.timeInTicks = timeInSeconds*60;
+                this.func = func;
+                this.eventTime = ticks + this.timeInTicks;
+
+            }
+        }
+        let h = new TimedEvent(3, function() {tagText("weather", "hey");})
+        
+        let eventsBag = {
+            h
         }
         
-        
+        console.log(eventsBag.h.eventTime);
+
         function pauseToggle(){
                 paused = true; 
                 clearInterval(time);
                 alert('Game Paused');
                 paused = false;
-                time = setInterval(theGameLoop, 1000);
+                time = setInterval(updateTag, 1000/60);
         }
         class Men{
             constructor(occupation){
@@ -116,8 +156,11 @@
             if (menCount > 0 && traineeCount == 0){
                 traineeCount++;
                 menCount--;
-                trainStart=true;
+                trainStart();
             }
+
+        }
+        function trainStart(){
 
         }
         function removeMan(occupation){
@@ -130,9 +173,30 @@
                 menCount++;
             }
         }
-        function timeThread(name, rate){
-            setInterval(name, rate);
+        class TimeThread{
+
+
+            constructor(func, duration){
+                this.timeLeft = 0;
+                this.func = func;
+                this.duration = duration;
+                
+                this.duration = this.duration * 1000;
+                this.time = setInterval(this.func, this.duration);
+                this.time2 = setInterval(()=> {
+                this.timeLeft++;
+                if(this.timeLeft>this.duration){
+                this.timeLeft = 0;
+                }
+                }   , 1);
+            }
+            pause(){
+                clearInterval(this.time);
+                clearInterval(this.time2);
+            } 
+
         }
+
         function produceFood(){
             foodCount = foodCount + farmerCount;
         }
@@ -181,5 +245,4 @@
             <div style="color: red;">NOTE!! THIS GAME MUST BE PLAYED WITH A KEYBOARD. 
                 THIS GAME IS ALSO A WORK IN PROGRESS.</div>
         </div>
-    
 </html>
