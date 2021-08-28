@@ -14,7 +14,7 @@
             <table class='table' style='border: 1px solid black'>
                 <th style='padding: 15px'>Weather: <span id='weather'></span></th>
                 <th style='text-align: center;'>Time of Day: <span id="timeofday"></span></th>
-                <th style='text-align: right;'>Season: <span>Autumn</span></th>
+                <th style='text-align: right;'>Season: <span id="season"></span></th>
             </table>
           </div>
           <div class="row">
@@ -49,8 +49,8 @@
         var traineeCount =0;
         var trainTime = 0;
 
-        var currentTime = 0;
         var paused = false;
+
         var time2 = setInterval(theGameLoop, 1000);
         var time = setInterval(updateTag, 1000/60);
 
@@ -59,6 +59,7 @@
         }
 
         window.addEventListener("keypress", resolveKey);
+        //maps each key to a corresponding function
         function resolveKey() {
             switch (event.key) {
                 case 'w': makeWorker(); break;
@@ -71,43 +72,30 @@
             }
         }
         var ticks = 0;
-        var now;
-        var worldTime = 0;/*
-        function timer(eventTime){
-
-            var startTime = new Date().getTime();
-            if (new Date().getTime() - startTime >= eventTime){
-                return true;
-                break;
-            }
-        }*/
-
-        var startTime = new Date().getTime();
+        var sixtyTicks;
         function updateTag(){
-            
-            if (new Date().getTime() - startTime >= 1000){
-                startTime = new Date().getTime();
-                
-                worldTime++;
+            //check for events that end on the current tick and execute the 
+            //respective function.
+            for(i in eventsBag){
+                if (ticks - eventsBag[i].eventTime >= 0){
+                eventsBag[i].func();
+                }
             }
-         
+            sixtyTicks = Math.trunc(ticks/60);
+
+            //for updating all HTML tags.
             tagText("workers", workerCount);
             tagText("food", foodCount);
             tagText("farmers", farmerCount);
             tagText("men", menCount);
             tagText("soldiers", soldierCount);
             tagText("trainees", traineeCount);
-            
-            tagText("info", worldTime);
-            
+            tagText("season", sixtyTicks);
+            tagText("info", );
 
-            for(i in eventsBag){
-                if (ticks - eventsBag[i].eventTime >= 0){
-                eventsBag[i].func();
-            }
-            }
             ticks++;
         }
+        //for creating timed events that execute a function after a certain time
         class TimedEvent{
             constructor(timeInSeconds, func){
                 this.timeInTicks = timeInSeconds*60;
@@ -116,14 +104,15 @@
 
             }
         }
-        let h = new TimedEvent(3, function() {tagText("weather", "hey");})
+        let test = new TimedEvent(3, function() {tagText("weather", "hey");})
         
         let eventsBag = {
-            h
+            test
         }
         
         console.log(eventsBag.h.eventTime);
 
+        //pauses the game and displays an alert box
         function pauseToggle(){
                 paused = true; 
                 clearInterval(time);
@@ -131,6 +120,7 @@
                 paused = false;
                 time = setInterval(updateTag, 1000/60);
         }
+
         class Men{
             constructor(occupation){
                 var alive = true;
@@ -173,34 +163,12 @@
                 menCount++;
             }
         }
-        class TimeThread{
-
-
-            constructor(func, duration){
-                this.timeLeft = 0;
-                this.func = func;
-                this.duration = duration;
-                
-                this.duration = this.duration * 1000;
-                this.time = setInterval(this.func, this.duration);
-                this.time2 = setInterval(()=> {
-                this.timeLeft++;
-                if(this.timeLeft>this.duration){
-                this.timeLeft = 0;
-                }
-                }   , 1);
-            }
-            pause(){
-                clearInterval(this.time);
-                clearInterval(this.time2);
-            } 
-
-        }
 
         function produceFood(){
             foodCount = foodCount + farmerCount;
         }
         function theGameLoop(){
+            var currentTime = 0;
             currentTime++;
             if (currentTime < 20) {
                 tagText("timeofday", "Morning");
@@ -220,16 +188,7 @@
                 currentTime = 0;
             }
         }
-            /*
-            if (trainStart){
-                trainTime++;
-                if(trainTime >= 10) {
-                    trainStart = false;
-                    traineeCount--; 
-                    trainTime = 0;
-                    soldierCount++;
-                }
-            }*/
+
         function consumeFood(){
             var totalMen = workerCount + farmerCount + menCount + soldierCount;
             foodCount = foodCount - totalMen*2;
