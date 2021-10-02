@@ -47,6 +47,7 @@
         var menCount = 10;
         var soldierCount =0;
         var traineeCount =0;
+
         var trainTime = 0;
 
         var paused = false;
@@ -54,17 +55,18 @@
         var time2 = setInterval(theGameLoop, 1000);
         var time = setInterval(updateTag, 1000/60);
 
+        eventsArray= [];
         function tagText(id, inner){
             document.getElementById(id).innerHTML = inner;
         }
 
         window.addEventListener("keypress", resolveKey);
-        //maps each key to a corresponding function
+        //maps each key to a corresponding function.
         function resolveKey() {
             switch (event.key) {
-                case 'w': makeWorker(); break;
-                case 'W': fireWorker(); break;
-                case 'f': makeFarmer(); break;
+                case 'w': hireMan("worker"); break;
+                case 'W': removeMan("worker"); break;
+                case 'f': hireMan("farmer"); break;
                 case 'F': removeMan("farmer"); break;
                 case 'p': pauseToggle(); break;
                 case 's': makeSoldier(); break;
@@ -76,9 +78,10 @@
         function updateTag(){
             //check for events that end on the current tick and execute the 
             //respective function.
-            for(i in eventsBag){
-                if (ticks - eventsBag[i].eventTime >= 0){
-                eventsBag[i].func();
+            for(i in eventsArray){
+                if (ticks - eventsArray[i].eventTime >= 0){
+                eventsArray[i].func();
+                eventsArray.splice(i, 1);
                 }
             }
             sixtyTicks = Math.trunc(ticks/60);
@@ -95,22 +98,25 @@
 
             ticks++;
         }
-        //for creating timed events that execute a function after a certain time
-        class TimedEvent{
+        /*class TimedEvent{
             constructor(timeInSeconds, func){
                 this.timeInTicks = timeInSeconds*60;
                 this.func = func;
                 this.eventTime = ticks + this.timeInTicks;
-
+                
             }
+        }*/
+
+        //for creating timed events that execute a function after a certain time
+        function timePlus(timeInSeconds, func){
+                timeInTicks = timeInSeconds*60;
+                eventTime = ticks + timeInTicks;
+                let timedEvent = {
+                    eventTime,
+                    func
+                }
+                eventsArray.push(timedEvent);
         }
-        let test = new TimedEvent(3, function() {tagText("weather", "hey");})
-        
-        let eventsBag = {
-            test
-        }
-        
-        console.log(eventsBag.h.eventTime);
 
         //pauses the game and displays an alert box
         function pauseToggle(){
@@ -129,19 +135,6 @@
             }
 
         }
-        function makeWorker(){
-            if (menCount > 0){
-            workerCount++;
-            menCount--;
-            }
-        }
-        
-        function makeFarmer(){
-            if (menCount > 0){
-                farmerCount++;
-                menCount--;
-            }  
-        }
         function makeSoldier(){
             if (menCount > 0 && traineeCount == 0){
                 traineeCount++;
@@ -150,18 +143,29 @@
             }
 
         }
-        function trainStart(){
-
+        function hireMan(occupation){
+            if (menCount > 0){
+            switch(occupation){
+                case "worker": workerCount++; break;
+                case "farmer": farmerCount++; break;
+                case "worker": workerCount++; break;
+                default: ;
+            }
+            menCount--;
+            }
         }
+        //function for removing men; adding them to "available men"
         function removeMan(occupation){
-            if(occupation =="farmer" && farmerCount > 0){
+            if(occupation ==="farmer" && farmerCount > 0){
                 farmerCount--;
                 menCount++;
             }
-            else if(occupation =="worker" && workerCount > 0){
+            else if(occupation ==="worker" && workerCount > 0){
                 workerCount--;
                 menCount++;
             }
+            
+            
         }
 
         function produceFood(){
@@ -201,6 +205,7 @@
         <div class="container pt-3 pl-5 pr-5 ">
             <div>Instructions: </div>
             <div>w = assign worker, f = assign farmer, p = pause game</div>
+            <div>Press "Shift" and the respective worker button to remove a man from his post.</div>
             <div style="color: red;">NOTE!! THIS GAME MUST BE PLAYED WITH A KEYBOARD. 
                 THIS GAME IS ALSO A WORK IN PROGRESS.</div>
         </div>
