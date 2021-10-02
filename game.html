@@ -13,7 +13,7 @@
         <div class="table-responsive-sm"  >
             <table class='table' style='border: 1px solid black'>
                 <th style='padding: 15px'>Weather: <span id='weather'></span></th>
-                <th style='text-align: center;'>Time of Day: <span id="timeofday"></span></th>
+                <th style='text-align: center;'>Time of Day: <span id="timeofday"></span><div>Time: <span id="time"></span></div></th>
                 <th style='text-align: right;'>Season: <span id="season"></span></th>
             </table>
           </div>
@@ -22,7 +22,6 @@
                 <ul>
                 <li>Available Men: <span id='men'></span></li>
                 <li>Food: <span id='food'></span></li>
-                
            </ul>
         </div>
             <div class="col">
@@ -33,7 +32,34 @@
                 <li>Soldiers (I): <span id='soldiers'></span></li>
             </ul>
             </div>
+            <div class="col">
+                <ul id="buildings">
+    
+                    
+                </ul>
+                </div>
           </div>
+          <hr>
+          <div class="row">
+            <div class="col">
+                <ul>
+                
+           </ul>
+        </div>
+            <div class="col">
+            <ul>
+               
+            </ul>
+            </div>
+            <div class="col">
+                <ul id="buildingsTBC">
+                    <progress id="bar" style="width:40%" value=0 max="50"> 32% </progress>
+                    
+                    
+                </ul>
+                </div>
+          </div>
+          
        
        <div class="card">
         <div class="card-header font-weight-bold">Event Log</div>
@@ -74,14 +100,20 @@
             }
         }
         var ticks = 0;
+        var progress=0;
         var sixtyTicks;
         function updateTag(){
             //check for events that end on the current tick and execute the 
             //respective function.
             for(i in eventsArray){
-                if (ticks - eventsArray[i].eventTime >= 0){
-                eventsArray[i].func();
-                eventsArray.splice(i, 1);
+                if (ticks - eventsArray[i].eventTime >= 0) {
+                    eventsArray[i].func();
+                    if ((eventsArray[i].recurring)){
+                        eventsArray[i].eventTime = (eventsArray[i].eventTime)+eventsArray[i].multiplier;
+                    }
+                    else {
+                        eventsArray.splice(i, 1);
+                    }
                 }
             }
             sixtyTicks = Math.trunc(ticks/60);
@@ -93,8 +125,10 @@
             tagText("men", menCount);
             tagText("soldiers", soldierCount);
             tagText("trainees", traineeCount);
-            tagText("season", sixtyTicks);
-            tagText("info", );
+            tagText("season", "Autumn");
+            tagText("info", "Placeholder");
+            tagText("time", sixtyTicks);
+            document.getElementById("bar").value= progress;
 
             ticks++;
         }
@@ -108,16 +142,26 @@
         }*/
 
         //for creating timed events that execute a function after a certain time
-        function timePlus(timeInSeconds, func){
+        function timePlus(timeInSeconds, recurring=false, func){
                 timeInTicks = timeInSeconds*60;
                 eventTime = ticks + timeInTicks;
+                multiplier = eventTime;
                 let timedEvent = {
                     eventTime,
-                    func
+                    func,
+                    recurring,
+                    multiplier
                 }
                 eventsArray.push(timedEvent);
         }
+        function activateBar(time){    
+                timePlus(1, true, function() {
+                    progress++;
 
+                });
+        }
+        timePlus(1, true, function(){soldierCount++;})
+        activateBar(3);
         //pauses the game and displays an alert box
         function pauseToggle(){
                 paused = true; 
@@ -126,7 +170,19 @@
                 paused = false;
                 time = setInterval(updateTag, 1000/60);
         }
+        function addBuilding(name, tbc){
+            const para = document.createElement("li");
+            const node = document.createTextNode(name);
+            para.appendChild(node);
+            if(tbc){
+                element = document.getElementById("buildingsTBC");  
 
+            }
+            else{
+                element = document.getElementById("buildings");
+            }
+            element.appendChild(para);
+        }
         class Men{
             constructor(occupation){
                 var alive = true;
@@ -141,7 +197,6 @@
                 menCount--;
                 trainStart();
             }
-
         }
         function hireMan(occupation){
             if (menCount > 0){
