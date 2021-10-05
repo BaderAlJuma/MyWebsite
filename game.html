@@ -53,7 +53,7 @@
             </div>
             <div class="col">
                 <ul id="buildingsTBC">
-                    <progress id="bar" style="width:40%" value=0 max="50"> 32% </progress>
+                    <progress id="bar" style="width:40%;" value=0 max="50"> 32% </progress>
                     
                     
                 </ul>
@@ -116,6 +116,11 @@
                     }
                 }
             }
+            //reset bar
+            if(progress > currentProgress){
+                progress = 0;
+            }
+            
             sixtyTicks = Math.trunc(ticks/60);
 
             //for updating all HTML tags.
@@ -142,7 +147,7 @@
         }*/
 
         //for creating timed events that execute a function after a certain time
-        function timePlus(timeInSeconds, recurring=false, func){
+        function timePlus(timeInSeconds, func, recurring=false){
                 timeInTicks = timeInSeconds*60;
                 eventTime = ticks + timeInTicks;
                 multiplier = eventTime;
@@ -154,13 +159,18 @@
                 }
                 eventsArray.push(timedEvent);
         }
+
+        //variable for max value of progress bar with a funcion that activates the progress bar animation
+        currentProgress = 10;
+        document.getElementById("bar").max = currentProgress;
         function activateBar(time){    
-                timePlus(1, true, function() {
+                timePlus(1, function() {
                     progress++;
 
-                });
+                }, true);
         }
-        timePlus(1, true, function(){soldierCount++;})
+        
+        timePlus(1, function(){soldierCount++;})
         activateBar(3);
         //pauses the game and displays an alert box
         function pauseToggle(){
@@ -170,7 +180,8 @@
                 paused = false;
                 time = setInterval(updateTag, 1000/60);
         }
-        function addBuilding(name, tbc){
+        //adds text to the buildings section (first column from the right)
+        function addBuilding(name, tbc=false){
             const para = document.createElement("li");
             const node = document.createTextNode(name);
             para.appendChild(node);
@@ -183,6 +194,7 @@
             }
             element.appendChild(para);
         }
+
         class Men{
             constructor(occupation){
                 var alive = true;
@@ -247,7 +259,7 @@
                 currentTime = 0;
             }
         }
-
+        //subtract food based on all active men
         function consumeFood(){
             var totalMen = workerCount + farmerCount + menCount + soldierCount;
             foodCount = foodCount - totalMen*2;
