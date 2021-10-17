@@ -12,9 +12,12 @@
     <body>
         <div class="table-responsive-sm"  >
             <table class='table' style='border: 1px solid black'>
-                <th style='padding: 15px'>Weather: <span id='weather'></span></th>
-                <th style='text-align: center;'>Time of Day: <span id="timeofday"></span><div>Time: <span id="time"></span></div></th>
-                <th style='text-align: right;'>Season: <span id="season"></span></th>
+                <th style='text-align: left;'>
+                    Time of Day: <span id="timeofday"></span><div>Time: <span id="time"></span></th>
+                <th style='text-align: center;'>
+                    Day <span id="daynumber"></span></th>
+                <th style='padding: 15px; text-align: right;'>
+                    Weather: Clear<span id='weather'></span></th>
             </table>
           </div>
           <div class="row">
@@ -73,18 +76,13 @@
         var menCount = 10;
         var soldierCount =0;
         var traineeCount =0;
-
         var trainTime = 0;
 
         var paused = false;
 
-        var time2 = setInterval(theGameLoop, 1000);
         var time = setInterval(updateTag, 1000/60);
 
         eventsArray= [];
-        function tagText(id, inner){
-            document.getElementById(id).innerHTML = inner;
-        }
 
         window.addEventListener("keypress", resolveKey);
         //maps each key to a corresponding function.
@@ -102,15 +100,17 @@
         }
 
         var ticks = 0;
-        var sixtyTicks;
+        var clockTicks = 0;
+        var sixtyTicks = 0;
+        var dayNumber = 1;
+        timeOfDay = "Morning";
         function updateTag(){
             //check for events that end on the current tick and execute the 
-            //respective function.
-            
+            //respective function.  
             for(i in eventsArray){
                 //console.log(eventsArray[i]);
                 if (ticks - eventsArray[i].eventTime >= 0) {
-                    console.log(eventsArray[i]);
+                    
                     eventsArray[i].func();
                     if ((eventsArray[i].recurring > 0)){
                         eventsArray[i].eventTime = (eventsArray[i].eventTime)+eventsArray[i].multiplier;
@@ -122,11 +122,40 @@
                     }
                 }
             }
-            //reset bar
-            
-            
-            
 
+            //reset building progress bar
+            if(progress>maxProgress){
+                
+                progress = 0;
+            }
+
+            ticks++;
+            sixtyTicks = Math.trunc(clockTicks/60);
+            clockTicks++;
+
+            if(clockTicks < 300){
+                timeOfDay = "Morning";
+            }
+            else if(clockTicks < 600){
+                timeOfDay = "Afternoon";
+            }
+            else if(clockTicks < 900){
+                timeOfDay = "Evening";
+            }
+            else{
+                clockTicks = 0;
+                dayNumber++;
+            }
+            if(ticks % 60 === 0){
+                console.log("YES");
+                switch(timeOfDay){
+                case "Morning": produceFood(); break;
+                case "Afternoon": consumeFood(); break;
+                case "Evening": ; break;
+                default: ; break;
+            }
+            }
+            
             //for updating all HTML tags.
             tagText("workers", workerCount);
             tagText("food", foodCount);
@@ -134,24 +163,15 @@
             tagText("men", menCount);
             tagText("soldiers", soldierCount);
             tagText("trainees", traineeCount);
-            tagText("season", "Autumn");
             tagText("info", "Placeholder");
             tagText("time", sixtyTicks);
+            tagText("daynumber", dayNumber);
+            tagText("timeofday", timeOfDay);
             document.getElementById("bar").value= progress;
-
-            sixtyTicks = Math.trunc(ticks/60);
-            ticks++;
         }
-        /*class TimedEvent{
-            constructor(timeInSeconds, func){
-                this.timeInTicks = timeInSeconds*60;
-                this.func = func;
-                this.eventTime = ticks + this.timeInTicks;
-                
-            }
-        }*/
-        function hey(){
-            "hey";
+        
+        function tagText(id, inner){
+            document.getElementById(id).innerHTML = inner;
         }
         //for creating timed events that execute a function after a certain time
         function timePlus(timeInSeconds, func, recurring=0){
@@ -168,18 +188,12 @@
         }
         
         //variable for max value of progress bar with a funcion that activates the progress bar animation
-        currentProgress = 10;
+        maxProgress = 10;
         progress = 0;
-        document.getElementById("bar").max = currentProgress;
+        document.getElementById("bar").max = maxProgress;
         function activateBar(){   
-            if(progress < currentProgress){
                 progress++;
-                
-            } 
-            else{
-                progress=0;
-            }
-            
+  
         }
 
         //pauses the game and displays an alert box
@@ -206,7 +220,7 @@
                 buildingInProgress = true;
                 if(name === "mill"){
                     timePlus(1, activateBar, 10);
-                    timePlus(10, () => { 
+                    timePlus(11, () => { 
                         buildingInProgress = false;
                         makeBuilding("mill");
                         para.remove();
@@ -253,6 +267,10 @@
                 workerCount--;
                 menCount++;
             }
+            else if(occupation ==="soldier" && soldierCount > 0){
+                soldierCount--;
+                menCount++;
+            }
             
             
         }
@@ -260,27 +278,7 @@
         function produceFood(){
             foodCount = foodCount + farmerCount;
         }
-        function theGameLoop(){
-            var currentTime = 0;
-            currentTime++;
-            if (currentTime < 20) {
-                tagText("timeofday", "Morning");
-                produceFood();
-            }
-            else if (currentTime >= 20 && currentTime < 30) {
-                tagText("timeofday", "Afternoon");
-                consumeFood();
-            }
-            else if (currentTime >= 30 && currentTime < 50) {
-                tagText("timeofday", "Evening");
-            }
-            else if (currentTime >= 50 && currentTime < 70) {
-                tagText("timeofday", "Midnight");
-            }
-            else {
-                currentTime = 0;
-            }
-        }
+   
         //subtract food based on all active men
         function consumeFood(){
             var totalMen = workerCount + farmerCount + menCount + soldierCount;
