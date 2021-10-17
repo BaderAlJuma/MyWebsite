@@ -66,7 +66,11 @@
        
        <div class="card">
         <div class="card-header font-weight-bold">Event Log</div>
-        <div class="card-body" id="info"></div>
+        <div class="card-body" id="info" style="font-size: 13px; max-block-size: 200px; overflow: scroll;">
+        <ul style="list-style-type: square; font-style: italic;" id="eventlog">
+            
+        </ul>
+        </div>
       </div>
     </body>
     <script>
@@ -122,7 +126,7 @@
                     }
                 }
             }
-
+ 
             //reset building progress bar
             if(progress>maxProgress){
                 
@@ -163,13 +167,22 @@
             tagText("men", menCount);
             tagText("soldiers", soldierCount);
             tagText("trainees", traineeCount);
-            tagText("info", "Placeholder");
             tagText("time", sixtyTicks);
             tagText("daynumber", dayNumber);
             tagText("timeofday", timeOfDay);
             document.getElementById("bar").value= progress;
         }
-        
+        eventLog("You find yourself the leader of a humble establishment...");
+        function eventLog(newText){
+            
+            const li = document.createElement("li");
+            const textNode = document.createTextNode(newText);
+            li.appendChild(textNode);
+            
+            ul = document.getElementById("eventlog");
+            ul.appendChild(li);
+
+        }
         function tagText(id, inner){
             document.getElementById(id).innerHTML = inner;
         }
@@ -193,7 +206,6 @@
         document.getElementById("bar").max = maxProgress;
         function activateBar(){   
                 progress++;
-  
         }
 
         //pauses the game and displays an alert box
