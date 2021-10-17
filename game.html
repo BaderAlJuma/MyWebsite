@@ -96,20 +96,26 @@
                 case 'F': removeMan("farmer"); break;
                 case 'p': pauseToggle(); break;
                 case 's': makeSoldier(); break;
+                case '7': makeBuilding("mill", true); break;
                 default: ;
             }
         }
+
         var ticks = 0;
-        var progress=0;
         var sixtyTicks;
         function updateTag(){
             //check for events that end on the current tick and execute the 
             //respective function.
+            
             for(i in eventsArray){
+                //console.log(eventsArray[i]);
                 if (ticks - eventsArray[i].eventTime >= 0) {
+                    console.log(eventsArray[i]);
                     eventsArray[i].func();
-                    if ((eventsArray[i].recurring)){
+                    if ((eventsArray[i].recurring > 0)){
                         eventsArray[i].eventTime = (eventsArray[i].eventTime)+eventsArray[i].multiplier;
+                        eventsArray[i].recurring--;
+                        
                     }
                     else {
                         eventsArray.splice(i, 1);
@@ -117,11 +123,9 @@
                 }
             }
             //reset bar
-            if(progress > currentProgress){
-                progress = 0;
-            }
             
-            sixtyTicks = Math.trunc(ticks/60);
+            
+            
 
             //for updating all HTML tags.
             tagText("workers", workerCount);
@@ -135,6 +139,7 @@
             tagText("time", sixtyTicks);
             document.getElementById("bar").value= progress;
 
+            sixtyTicks = Math.trunc(ticks/60);
             ticks++;
         }
         /*class TimedEvent{
@@ -145,12 +150,14 @@
                 
             }
         }*/
-
+        function hey(){
+            "hey";
+        }
         //for creating timed events that execute a function after a certain time
-        function timePlus(timeInSeconds, func, recurring=false){
+        function timePlus(timeInSeconds, func, recurring=0){
                 timeInTicks = timeInSeconds*60;
                 eventTime = ticks + timeInTicks;
-                multiplier = eventTime;
+                multiplier = timeInTicks;
                 let timedEvent = {
                     eventTime,
                     func,
@@ -159,19 +166,22 @@
                 }
                 eventsArray.push(timedEvent);
         }
-
+        
         //variable for max value of progress bar with a funcion that activates the progress bar animation
         currentProgress = 10;
+        progress = 0;
         document.getElementById("bar").max = currentProgress;
-        function activateBar(time){    
-                timePlus(1, function() {
-                    progress++;
-
-                }, true);
+        function activateBar(){   
+            if(progress < currentProgress){
+                progress++;
+                
+            } 
+            else{
+                progress=0;
+            }
+            
         }
-        
-        timePlus(1, function(){soldierCount++;})
-        activateBar(3);
+
         //pauses the game and displays an alert box
         function pauseToggle(){
                 paused = true; 
@@ -181,20 +191,32 @@
                 time = setInterval(updateTag, 1000/60);
         }
         //adds text to the buildings section (first column from the right)
-        function addBuilding(name, tbc=false){
+        buildingInProgress = false;
+        function makeBuilding(name, tbc=false){
             const para = document.createElement("li");
+            para.id="b";
             const node = document.createTextNode(name);
             para.appendChild(node);
-            if(tbc){
-                element = document.getElementById("buildingsTBC");  
-
-            }
-            else{
+            
+            if(!tbc){
                 element = document.getElementById("buildings");
+                element.appendChild(para);
             }
-            element.appendChild(para);
+            else if(!buildingInProgress){
+                buildingInProgress = true;
+                if(name === "mill"){
+                    timePlus(1, activateBar, 10);
+                    timePlus(10, () => { 
+                        buildingInProgress = false;
+                        makeBuilding("mill");
+                        para.remove();
+                        
+                    })
+                }
+                element = document.getElementById("buildingsTBC");  
+                element.appendChild(para);
+            }
         }
-
         class Men{
             constructor(occupation){
                 var alive = true;
