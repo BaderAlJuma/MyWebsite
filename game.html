@@ -31,8 +31,7 @@
             <ul>
                 <li>Workers: <span id='workers'></span></li>
                 <li>Farmers: <span id='farmers'></span></li>
-                <li>Soldiers In Training: <span id='trainees'></span></li>
-                <li>Soldiers (I): <span id='soldiers'></span></li>
+                <li>Soldiers: <span id='soldiers'></span></li>
             </ul>
             </div>
             <div class="col">
@@ -50,7 +49,8 @@
            </ul>
         </div>
             <div class="col">
-            <ul>
+                <ul id="unitsTBC">
+                    <progress id="bar2" style="width:40%;" value=0 max="50"> 32% </progress>
                
             </ul>
             </div>
@@ -97,8 +97,8 @@
                 case 'f': hireMan("farmer"); break;
                 case 'F': removeMan("farmer"); break;
                 case 'p': pauseToggle(); break;
-                case 's': makeSoldier(); break;
-                case '7': makeBuilding("mill", true); break;
+                case 's': trainSoldier(); break;
+                case '7': makeBuilding("Mill", true); break;
                 default: ;
             }
         }
@@ -166,11 +166,11 @@
             tagText("farmers", farmerCount);
             tagText("men", menCount);
             tagText("soldiers", soldierCount);
-            tagText("trainees", traineeCount);
             tagText("time", sixtyTicks);
             tagText("daynumber", dayNumber);
             tagText("timeofday", timeOfDay);
             document.getElementById("bar").value= progress;
+            document.getElementById("bar2").value= progress2;
         }
         eventLog("You find yourself the leader of a humble establishment...");
         function eventLog(newText){
@@ -181,7 +181,7 @@
             
             ul = document.getElementById("eventlog");
             ul.appendChild(li);
-
+            
         }
         function tagText(id, inner){
             document.getElementById(id).innerHTML = inner;
@@ -203,11 +203,16 @@
         //variable for max value of progress bar with a funcion that activates the progress bar animation
         maxProgress = 10;
         progress = 0;
+        progress2 = 0;
+        maxProgress2 = 20;
+        document.getElementById("bar2").max = maxProgress2;
         document.getElementById("bar").max = maxProgress;
         function activateBar(){   
                 progress++;
         }
-
+        function activateBar2(){   
+                progress2++;
+        }
         //pauses the game and displays an alert box
         function pauseToggle(){
                 paused = true; 
@@ -218,6 +223,7 @@
         }
         //adds text to the buildings section (first column from the right)
         buildingInProgress = false;
+        millExists = false;
         function makeBuilding(name, tbc=false){
             const para = document.createElement("li");
             para.id="b";
@@ -230,17 +236,18 @@
             }
             else if(!buildingInProgress){
                 buildingInProgress = true;
-                if(name === "mill"){
+                if(name === "Mill" && !millExists){
                     timePlus(1, activateBar, 10);
                     timePlus(11, () => { 
+                        millExists = true;
                         buildingInProgress = false;
-                        makeBuilding("mill");
+                        makeBuilding("Mill");
                         para.remove();
                         
                     })
+                    element = document.getElementById("buildingsTBC");  
+                    element.appendChild(para);
                 }
-                element = document.getElementById("buildingsTBC");  
-                element.appendChild(para);
             }
         }
         class Men{
@@ -251,11 +258,26 @@
             }
 
         }
-        function makeSoldier(){
-            if (menCount > 0 && traineeCount == 0){
+        function trainSoldier(){
+            if (menCount > 0 && traineeCount === 0) {
                 traineeCount++;
                 menCount--;
-                trainStart();
+
+                const name = "Soldier In Training";
+                const para = document.createElement("li");
+                para.id = "sol";
+                const node = document.createTextNode(name);
+                para.appendChild(node);
+                element = document.getElementById("unitsTBC");
+                element.appendChild(para);
+
+                timePlus(1, activateBar2, 20);
+                timePlus(21, () => {
+                    para.remove();
+                    soldierCount++;
+                    traineeCount = 0;
+                    progress2 = 0;
+                })
             }
         }
         function hireMan(occupation){
@@ -289,12 +311,15 @@
 
         function produceFood(){
             foodCount = foodCount + farmerCount;
+            if(millExists){
+                foodCount += farmerCount;
+            }
         }
    
         //subtract food based on all active men
         function consumeFood(){
             var totalMen = workerCount + farmerCount + menCount + soldierCount;
-            foodCount = foodCount - totalMen*2;
+            foodCount = foodCount - totalMen;
             if (foodCount < 0){
                 foodCount = 0;
             }
