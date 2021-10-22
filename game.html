@@ -50,13 +50,13 @@
         </div>
             <div class="col">
                 <ul id="unitsTBC">
-                    <progress id="bar2" style="width:40%;" value=0 max="50"> 32% </progress>
+                    <progress id="bar2" style="width:40%; visibility: hidden;" value=0 max="50"> 32% </progress>
                
             </ul>
             </div>
             <div class="col">
                 <ul id="buildingsTBC">
-                    <progress id="bar" style="width:40%;" value=0 max="50"> 32% </progress>
+                    <progress id="bar" style="width:40%; visibility: hidden;" value=0 max="50"> 32% </progress>
                     
                     
                 </ul>
@@ -81,6 +81,9 @@
         var soldierCount =0;
         var traineeCount =0;
         var trainTime = 0;
+        currentInvaders = {
+            orcs,
+        }
 
         var paused = false;
 
@@ -158,6 +161,9 @@
                 case "Evening": ; break;
                 default: ; break;
             }
+            for(let i=0; currentInvaders.orcs > i; i++){
+                
+            }
             }
             
             //for updating all HTML tags.
@@ -183,6 +189,11 @@
             ul.appendChild(li);
             
         }
+        function summonOrcs(number){
+            eventLog(number+ " orcs have invaded your keep!");
+            currentInvaders.orcs += number;
+        }
+        
         function tagText(id, inner){
             document.getElementById(id).innerHTML = inner;
         }
@@ -202,9 +213,9 @@
         
         //variable for max value of progress bar with a funcion that activates the progress bar animation
         maxProgress = 10;
+        maxProgress2 = 20;
         progress = 0;
         progress2 = 0;
-        maxProgress2 = 20;
         document.getElementById("bar2").max = maxProgress2;
         document.getElementById("bar").max = maxProgress;
         function activateBar(){   
@@ -221,49 +232,55 @@
                 paused = false;
                 time = setInterval(updateTag, 1000/60);
         }
+        function createItem(place, element, text, id){
+            temp = document.createElement(element);
+            temp.id= id;
+            textNode = document.createTextNode(text);
+            temp.appendChild(textNode);
+            thePlace = document.getElementById(place);
+            thePlace.appendChild(temp);
+        }
         //adds text to the buildings section (first column from the right)
         buildingInProgress = false;
         millExists = false;
         function makeBuilding(name, tbc=false){
-            const para = document.createElement("li");
-            para.id="b";
-            const node = document.createTextNode(name);
-            para.appendChild(node);
-            
             if(!tbc){
-                element = document.getElementById("buildings");
-                element.appendChild(para);
+                createItem("buildings", "li", name);
             }
             else if(!buildingInProgress){
-                buildingInProgress = true;
                 if(name === "Mill" && !millExists){
+                    buildingInProgress = true;
+                    document.getElementById("bar").style.visibility= "visible";
+                    createItem("buildingsTBC", "li", "Mill", 7);
                     timePlus(1, activateBar, 10);
-                    timePlus(11, () => { 
+                    timePlus(11, () => {
                         millExists = true;
                         buildingInProgress = false;
                         makeBuilding("Mill");
-                        para.remove();
-                        
+                        document.getElementById(7).remove();
+                        document.getElementById("bar").style.visibility= "hidden";
                     })
-                    element = document.getElementById("buildingsTBC");  
-                    element.appendChild(para);
                 }
             }
-        }
-        class Men{
-            constructor(occupation){
-                var alive = true;
-                var healthy = true;
-                
+        } 
+        solNum = 1;
+        class Soldier{
+            constructor(){
+                this.alive = true;
+                this.soldierName = "Soldier "+ solNum;
+                solNum++; 
+
             }
 
         }
+        new Soldier() = 
         function trainSoldier(){
             if (menCount > 0 && traineeCount === 0) {
                 traineeCount++;
                 menCount--;
 
-                const name = "Soldier In Training";
+                document.getElementById("bar2").style.visibility= "visible";
+                const name = "Soldier";
                 const para = document.createElement("li");
                 para.id = "sol";
                 const node = document.createTextNode(name);
@@ -277,6 +294,7 @@
                     soldierCount++;
                     traineeCount = 0;
                     progress2 = 0;
+                    document.getElementById("bar2").style.visibility= "hidden";
                 })
             }
         }
