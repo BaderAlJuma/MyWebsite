@@ -31,7 +31,7 @@
             <ul>
                 <li>Workers: <span id='workers'></span></li>
                 <li>Farmers: <span id='farmers'></span></li>
-                <li>Soldiers: <span id='soldiers'></span></li>
+                <li id="slist">Soldiers: <span id='soldiers'></span></li>
             </ul>
             </div>
             <div class="col">
@@ -81,9 +81,9 @@
         var soldierCount =0;
         var traineeCount =0;
         var trainTime = 0;
-        currentInvaders = {
-            orcs,
-        }
+        currentInvaders = 0;
+        
+        soldierBag= [];
 
         var paused = false;
 
@@ -95,6 +95,7 @@
         //maps each key to a corresponding function.
         function resolveKey() {
             switch (event.key) {
+                case 't': d(); break;
                 case 'w': hireMan("worker"); break;
                 case 'W': removeMan("worker"); break;
                 case 'f': hireMan("farmer"); break;
@@ -154,7 +155,7 @@
                 dayNumber++;
             }
             if(ticks % 60 === 0){
-                console.log("YES");
+                console.log();
                 switch(timeOfDay){
                 case "Morning": produceFood(); break;
                 case "Afternoon": consumeFood(); break;
@@ -167,6 +168,10 @@
             }
             
             //for updating all HTML tags.
+            for(let i of soldierBag){
+                info = i.soldierName+" ("+i.health+" HP)"
+                    tagText(i.solNum, info);
+            }
             tagText("workers", workerCount);
             tagText("food", foodCount);
             tagText("farmers", farmerCount);
@@ -213,7 +218,7 @@
         
         //variable for max value of progress bar with a funcion that activates the progress bar animation
         maxProgress = 10;
-        maxProgress2 = 20;
+        maxProgress2 = 2;
         progress = 0;
         progress2 = 0;
         document.getElementById("bar2").max = maxProgress2;
@@ -263,37 +268,49 @@
                 }
             }
         } 
+        function d(){
+            soldierBag[0].health = 40;
+        }
         solNum = 1;
         class Soldier{
             constructor(){
                 this.alive = true;
                 this.soldierName = "Soldier "+ solNum;
+                this.solNum = solNum;
                 solNum++; 
-
+                this.health = 100;
             }
-
+            displayAndUpdate(){
+            }
         }
-        new Soldier() = 
+        // function updateS(){
+        //     for(let i = solNum;i > 0;i--){
+        //         if(i ==2){
+        //             sName = "s" + i;
+        //             tagText(i, (" ("+sName.health+" HP)"));
+        //         }
+        //     }
+        // }
+
+        
         function trainSoldier(){
             if (menCount > 0 && traineeCount === 0) {
                 traineeCount++;
                 menCount--;
-
+                sName = "s" + solNum;
                 document.getElementById("bar2").style.visibility= "visible";
-                const name = "Soldier";
-                const para = document.createElement("li");
-                para.id = "sol";
-                const node = document.createTextNode(name);
-                para.appendChild(node);
-                element = document.getElementById("unitsTBC");
-                element.appendChild(para);
+                createItem("unitsTBC", "div", "Soldier "+ solNum, "sol"); 
 
-                timePlus(1, activateBar2, 20);
-                timePlus(21, () => {
-                    para.remove();
+                timePlus(1, activateBar2, 2);
+                timePlus(3, () => {
                     soldierCount++;
                     traineeCount = 0;
                     progress2 = 0;
+                    document.getElementById("sol").remove();
+                    createItem("slist", "div", "Soldier "+ solNum, solNum);
+                    
+                    sName = new Soldier;
+                    soldierBag.push(sName);
                     document.getElementById("bar2").style.visibility= "hidden";
                 })
             }
