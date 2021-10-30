@@ -113,10 +113,9 @@
         var dayNumber = 1;
         timeOfDay = "Morning";
         function updateTag(){
-            //check for events that end on the current tick and execute the 
+            //check for events that end on the current tick and execute the
             //respective function.  
             for(i in eventsArray){
-                //console.log(eventsArray[i]);
                 if (ticks - eventsArray[i].eventTime >= 0) {
                     
                     eventsArray[i].func();
@@ -140,7 +139,7 @@
             ticks++;
             sixtyTicks = Math.trunc(clockTicks/60);
             clockTicks++;
-
+            //if blocks for time of day
             if(clockTicks < 300){
                 timeOfDay = "Morning";
             }
@@ -154,8 +153,8 @@
                 clockTicks = 0;
                 dayNumber++;
             }
-            if(ticks % 60 === 0){
-                console.log();
+            if(ticks % 60 === 0){//triggers events on the end of each second
+                console.log(soldierBag);
                 switch(timeOfDay){
                 case "Morning": produceFood(); break;
                 case "Afternoon": consumeFood(); break;
@@ -167,10 +166,10 @@
             }
             }
             
-            //for updating all HTML tags.
+            //for updating all HTML tags in real-time
             for(let i of soldierBag){
                 info = i.soldierName+" ("+i.health+" HP)"
-                    tagText(i.solNum, info);
+                    tagText(i.solId, info);
             }
             tagText("workers", workerCount);
             tagText("food", foodCount);
@@ -183,7 +182,38 @@
             document.getElementById("bar").value= progress;
             document.getElementById("bar2").value= progress2;
         }
+
+        //a class to manage soldier information
+        solId = 1;
+        class Soldier{
+            constructor(){
+                this.alive = true;
+                this.soldierName = "Soldier "+ solId;
+                this.solId = solId;
+                solId++; 
+                this.health = 100;
+            }
+            //inflict damage on soldiers and check if they die, if so remove them
+            takeDamage(value){
+                this.health -= value;
+                if(this.health <= 0){
+                    this.alive = false;
+                    for(i in soldierBag){
+                        if(this.solId == soldierBag[i].solId){
+                            document.getElementById(soldierBag[i].solId).remove();
+                            soldierBag.splice(i, 1);
+                            soldierCount--;
+                        }
+                        
+                    }
+                }
+            }
+            displayAndUpdate(){
+            }
+        }
+        
         eventLog("You find yourself the leader of a humble establishment...");
+        //function for adding text to the eventlog in the game
         function eventLog(newText){
             
             const li = document.createElement("li");
@@ -198,11 +228,12 @@
             eventLog(number+ " orcs have invaded your keep!");
             currentInvaders.orcs += number;
         }
-        
+        //update innerHtml values
         function tagText(id, inner){
             document.getElementById(id).innerHTML = inner;
         }
         //for creating timed events that execute a function after a certain time
+        //can also call the function repeatedly until timeInSeconds is finished
         function timePlus(timeInSeconds, func, recurring=0){
                 timeInTicks = timeInSeconds*60;
                 eventTime = ticks + timeInTicks;
@@ -237,6 +268,7 @@
                 paused = false;
                 time = setInterval(updateTag, 1000/60);
         }
+        //for creating html elements
         function createItem(place, element, text, id){
             temp = document.createElement(element);
             temp.id= id;
@@ -245,7 +277,7 @@
             thePlace = document.getElementById(place);
             thePlace.appendChild(temp);
         }
-        //adds text to the buildings section (first column from the right)
+        //adds building functionality and adds text to the buildings section (first column from the right)
         buildingInProgress = false;
         millExists = false;
         function makeBuilding(name, tbc=false){
@@ -269,22 +301,11 @@
             }
         } 
         function d(){
-            soldierBag[0].health = 40;
+            soldierBag[0].takeDamage(20);
         }
-        solNum = 1;
-        class Soldier{
-            constructor(){
-                this.alive = true;
-                this.soldierName = "Soldier "+ solNum;
-                this.solNum = solNum;
-                solNum++; 
-                this.health = 100;
-            }
-            displayAndUpdate(){
-            }
-        }
+
         // function updateS(){
-        //     for(let i = solNum;i > 0;i--){
+        //     for(let i = solId;i > 0;i--){
         //         if(i ==2){
         //             sName = "s" + i;
         //             tagText(i, (" ("+sName.health+" HP)"));
@@ -297,9 +318,9 @@
             if (menCount > 0 && traineeCount === 0) {
                 traineeCount++;
                 menCount--;
-                sName = "s" + solNum;
+                sName = "s" + solId;
                 document.getElementById("bar2").style.visibility= "visible";
-                createItem("unitsTBC", "div", "Soldier "+ solNum, "sol"); 
+                createItem("unitsTBC", "div", "Soldier "+ solId, "sol"); 
 
                 timePlus(1, activateBar2, 2);
                 timePlus(3, () => {
@@ -307,7 +328,7 @@
                     traineeCount = 0;
                     progress2 = 0;
                     document.getElementById("sol").remove();
-                    createItem("slist", "div", "Soldier "+ solNum, solNum);
+                    createItem("slist", "div", "Soldier "+ solId, solId);
                     
                     sName = new Soldier;
                     soldierBag.push(sName);
@@ -315,6 +336,7 @@
                 })
             }
         }
+        //for assigning occupations
         function hireMan(occupation){
             if (menCount > 0){
             switch(occupation){
@@ -343,7 +365,7 @@
             
             
         }
-
+        //produces food each time its called
         function produceFood(){
             foodCount = foodCount + farmerCount;
             if(millExists){
