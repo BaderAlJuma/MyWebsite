@@ -81,7 +81,7 @@
         var soldierCount =0;
         var traineeCount =0;
         var trainTime = 0;
-        currentInvaders = 0;
+        currentInvaders = {"orcs": 0};
         
         soldierBag= [];
 
@@ -160,10 +160,19 @@
                 case "Afternoon": consumeFood(); break;
                 case "Evening": ; break;
                 default: ; break;
-            }
-            for(let i=0; currentInvaders.orcs > i; i++){
-                
-            }
+                }
+                if(currentInvaders.orcs > 0){
+                    currentWave = currentInvaders.orcs;
+                    while(currentWave > 0 && soldierCount >0){
+                        for (i in soldierBag) {
+                            if(currentWave >0 && soldierCount >0){
+                                soldierBag[i].takeDamage(5);
+                                currentWave--;
+                            }
+                        }
+                    }
+                }
+
             }
             
             //for updating all HTML tags in real-time
@@ -211,7 +220,7 @@
             displayAndUpdate(){
             }
         }
-        
+
         eventLog("You find yourself the leader of a humble establishment...");
         //function for adding text to the eventlog in the game
         function eventLog(newText){
@@ -301,7 +310,7 @@
             }
         } 
         function d(){
-            soldierBag[0].takeDamage(20);
+            summonOrcs(5);
         }
 
         // function updateS(){
