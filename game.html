@@ -154,7 +154,7 @@
                 dayNumber++;
             }
             if(ticks % 60 === 0){//triggers events on the end of each second
-                console.log(soldierBag);
+    
                 switch(timeOfDay){
                 case "Morning": produceFood(); break;
                 case "Afternoon": consumeFood(); break;
@@ -162,6 +162,7 @@
                 default: ; break;
                 }
                 if(currentInvaders.orcs > 0){
+                    //console.log(currentInvaders.orcs);
                     currentWave = currentInvaders.orcs;
                     while(currentWave > 0 && soldierCount >0){
                         for (i in soldierBag) {
@@ -171,10 +172,11 @@
                             }
                         }
                     }
+                    inflictDamage();
                 }
-
+                console.log(killThreshold);
             }
-            
+            if(currentInvaders.orcs ==0) killThreshold =25;
             //for updating all HTML tags in real-time
             for(let i of soldierBag){
                 info = i.soldierName+" ("+i.health+" HP)"
@@ -255,7 +257,25 @@
                 }
                 eventsArray.push(timedEvent);
         }
-        
+        killThreshold = 25;
+        function inflictDamage(){
+            totalDamage = soldierCount * 5;
+            killThreshold -= totalDamage;
+            if(killThreshold === 0){
+                currentInvaders.orcs--;
+                killThreshold = 25;
+            }
+            while(killThreshold < 0){
+                if(currentInvaders.orcs > 0){
+                    killThreshold = 25 + killThreshold;
+                    if(killThreshold <= 0){
+                        currentInvaders.orcs--;
+                    }
+                }
+            }
+            
+
+        }
         //variable for max value of progress bar with a funcion that activates the progress bar animation
         maxProgress = 10;
         maxProgress2 = 2;
@@ -310,7 +330,7 @@
             }
         } 
         function d(){
-            summonOrcs(5);
+            summonOrcs(1);
         }
 
         // function updateS(){
