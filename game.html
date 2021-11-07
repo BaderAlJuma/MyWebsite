@@ -81,6 +81,7 @@
         var soldierCount =0;
         var traineeCount =0;
         var trainTime = 0;
+        var totalMen = workerCount + farmerCount + menCount + soldierCount;
         currentInvaders = {"orcs": 0};
         
         soldierBag= [];
@@ -108,6 +109,7 @@
         }
 
         var ticks = 0;
+        var invaderTick =0;
         var clockTicks = 0;
         var sixtyTicks = 0;
         var dayNumber = 1;
@@ -151,19 +153,19 @@
             }
             else{
                 clockTicks = 0;
+                menCount++;
                 dayNumber++;
             }
-            if(ticks % 60 === 0){//triggers events on the end of each second
-    
-                switch(timeOfDay){
-                case "Morning": produceFood(); break;
-                case "Afternoon": consumeFood(); break;
-                case "Evening": ; break;
-                default: ; break;
-                }
-                if(currentInvaders.orcs > 0){
+            
+            if(currentInvaders.orcs > 0){
+                if(invaderTick % 60 === 0){
                     //console.log(currentInvaders.orcs);
                     currentWave = currentInvaders.orcs;
+                    if(soldierCount <= 0){
+                        if(menCount>0) menCount--;
+                        else if(workerCount>0) workerCount--;
+                        else if(farmerCount>0) farmerCount--;
+                    }
                     while(currentWave > 0 && soldierCount >0){
                         for (i in soldierBag) {
                             if(currentWave >0 && soldierCount >0){
@@ -174,9 +176,24 @@
                     }
                     inflictDamage();
                 }
+                invaderTick++;
+            }
+            if(ticks % 60 === 0){//triggers events on the end of each second
+    
+                switch(timeOfDay){
+                case "Morning": produceFood(); break;
+                case "Afternoon": consumeFood(); break;
+                case "Evening": ; break;
+                default: ; break;
+                }
+                
                 console.log(killThreshold);
             }
-            if(currentInvaders.orcs ==0) killThreshold =25;
+            if(currentInvaders.orcs <= 0){
+                killThreshold =25;
+                invaderTick = 0;
+            }
+            
             //for updating all HTML tags in real-time
             for(let i of soldierBag){
                 info = i.soldierName+" ("+i.health+" HP)"
@@ -192,6 +209,11 @@
             tagText("timeofday", timeOfDay);
             document.getElementById("bar").value= progress;
             document.getElementById("bar2").value= progress2;
+
+
+            if((menCount + workerCount + farmerCount + soldierCount) ===0){
+                alert("GAME OVER.")
+            }
         }
 
         //a class to manage soldier information
@@ -233,7 +255,7 @@
             
             ul = document.getElementById("eventlog");
             ul.appendChild(li);
-            
+            updateScroll();
         }
         function summonOrcs(number){
             eventLog(number+ " orcs have invaded your keep!");
@@ -263,6 +285,7 @@
             killThreshold -= totalDamage;
             if(killThreshold === 0){
                 currentInvaders.orcs--;
+                eventLog("An orc has been killed! " + currentInvaders.orcs + " orcs left.");
                 killThreshold = 25;
             }
             while(killThreshold < 0){
@@ -273,9 +296,12 @@
                     }
                 }
             }
-            
-
         }
+
+        function updateScroll() {
+                var element = document.getElementById("info");
+                element.scrollTop = element.scrollHeight;
+            }
         //variable for max value of progress bar with a funcion that activates the progress bar animation
         maxProgress = 10;
         maxProgress2 = 2;
@@ -404,8 +430,7 @@
    
         //subtract food based on all active men
         function consumeFood(){
-            var totalMen = workerCount + farmerCount + menCount + soldierCount;
-            foodCount = foodCount - totalMen;
+            foodCount = foodCount - (menCount + workerCount + farmerCount + soldierCount);
             if (foodCount < 0){
                 foodCount = 0;
             }
