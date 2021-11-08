@@ -25,6 +25,7 @@
                 <ul>
                 <li>Available Men: <span id='men'></span></li>
                 <li>Food: <span id='food'></span></li>
+                <li>Gold: <span id='gold'></span></li>
            </ul>
         </div>
             <div class="col">
@@ -75,6 +76,7 @@
     </body>
     <script>
         weather = "Clear";
+        var gold = 0;
         var workerCount = 0;
         var foodCount = 0;
         var farmerCount = 0;        
@@ -153,7 +155,7 @@
             else if (clockTicks < 600) {
                 if (clockTicks === 301) {
                     chanceOfStorms = Math.random();
-                    if (chanceOfStorms > 0.5) {
+                    if (chanceOfStorms > 0.8) {
                         weather = "Stormy";
                         eventLog("Wind's howling...");
                     }
@@ -211,7 +213,7 @@
             if(ticks % 60 === 0){//triggers events on the end of each second
     
                 switch(timeOfDay){
-                case "Morning": produceFood(); break;
+                case "Morning": produceFood(), produceGold(); break;
                 case "Afternoon": consumeFood(); break;
                 case "Evening": ; break;
                 default: ; break;
@@ -237,6 +239,7 @@
             tagText("daynumber", dayNumber);
             tagText("timeofday", timeOfDay);
             tagText("weather", weather);
+            tagText("gold", gold);
             document.getElementById("bar").value= progress;
             document.getElementById("bar2").value= progress2;
 
@@ -370,7 +373,8 @@
                 createItem("buildings", "li", name);
             }
             else if(!buildingInProgress){
-                if(name === "Mill" && !millExists){
+                if(name === "Mill" && !millExists && gold >= 50){
+                    gold -= 50;
                     buildingInProgress = true;
                     document.getElementById("bar").style.visibility= "visible";
                     createItem("buildingsTBC", "li", "Mill", 7);
@@ -449,6 +453,16 @@
             }
             
             
+        }
+        function produceGold(){
+            gold = gold + (workerCount*2);
+        }
+        function buy(price){
+            if(price <= gold){
+                gold -= price;
+                return true;
+            }
+            else return false;
         }
         //produces food each time its called
         function produceFood(){
