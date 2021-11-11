@@ -101,7 +101,6 @@
         //maps each key to a corresponding function.
         function resolveKey() {
             switch (event.key) {
-                case 't': d(); break;
                 case 'w': hireMan("worker"); break;
                 case 'W': removeMan("worker"); break;
                 case 'f': hireMan("farmer"); break;
@@ -109,6 +108,7 @@
                 case 'p': pauseToggle(); break;
                 case 's': trainSoldier(); break;
                 case '7': makeBuilding("Mill", true); break;
+                case '8': makeBuilding("Watchtower", true); break;
                 default: ;
             }
         }
@@ -277,7 +277,17 @@
             displayAndUpdate(){
             }
         }
-
+        function waves(){
+            var numberOfThem = 1;
+            var timeForWatchtowerDetection = 14;
+            
+            timePlus(timeForWatchtowerDetection, () => {
+                if(watchtowerExists) eventLog(numberOfThem + " orc(s) are approaching your camp!");
+                timePlus(3, () => summonOrcs(numberOfThem, numberOfThem += 1));                
+            }, 999999);
+            
+        }
+        waves();
         eventLog("Only soldiers are worthy of having names...");
         //function for adding text to the eventlog in the game
         function eventLog(newText){
@@ -368,6 +378,7 @@
         //adds building functionality and adds text to the buildings section (first column from the right)
         buildingInProgress = false;
         millExists = false;
+        watchtowerExists = false;
         function makeBuilding(name, tbc=false){
             if(!tbc){
                 createItem("buildings", "li", name);
@@ -387,11 +398,23 @@
                         document.getElementById("bar").style.visibility= "hidden";
                     })
                 }
+                else if(name === "Watchtower" && !watchtowerExists && gold >= 1000){
+                    gold -= 1000;
+                    buildingInProgress = true;
+                    document.getElementById("bar").style.visibility= "visible";
+                    createItem("buildingsTBC", "li", "Watchtower", 8);
+                    timePlus(1, activateBar, 10);
+                    timePlus(11, () => {
+                        watchtowerExists = true;
+                        buildingInProgress = false;
+                        makeBuilding("Watchtower");
+                        document.getElementById(8).remove();
+                        document.getElementById("bar").style.visibility= "hidden";
+                    })
+                }
             }
         } 
-        function d(){
-            summonOrcs(1);
-        }
+        
 
         // function updateS(){
         //     for(let i = solId;i > 0;i--){
