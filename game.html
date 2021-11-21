@@ -87,6 +87,12 @@
         var starvation = false;
         var chanceOfStorms = 0;
         var totalMen = workerCount + farmerCount + menCount + soldierCount;
+        var soldierNames = ["Akibrus", "Angun", "Balrus", "Bulruk", "Caldor", "Dagen",
+         "Darvyn", "Delvin", "Dracyian", "Dray", "Eldar", "Engar", "Fabien", "Farkas",
+          "Galdor", "Igor", "Jai-Blynn", "Klayden", "Laimus", "Malfas", "Norok", "Orion",
+           "Pindious", "Quintus", "Rammir", "Remus", "Rorik", "Sabir ", "Séverin", "Sirius",
+            "Soril", "Sulfu", "Syfas", "Viktas", "Vyn", "Wilkass", "Yagul", "Zakkas", "Zarek", 
+            "Zorion"];
         currentInvaders = {"orcs": 0};
         
         soldierBag= [];
@@ -254,7 +260,8 @@
         class Soldier{
             constructor(){
                 this.alive = true;
-                this.soldierName = "Soldier "+ solId;
+                const randomName = Math.floor(Math.random() * 40);
+                this.soldierName = soldierNames[randomName];
                 this.solId = solId;
                 solId++; 
                 this.health = 100;
@@ -506,11 +513,12 @@
         }
     </script>
     <hr>
-        <div class="container pt-3 pl-5 pr-5 ">
+        <div class="container pt-3 pl-5 pr-5 " style="font-size: 13px;">
             <div>Instructions: </div>
-            <div>w = assign worker, f = assign farmer, p = pause game</div>
+            <div>7 = build mill, 8 = build watchtower, w = assign worker, 
+                f = assign farmer, s = train soldier, p = pause game</div>
             <div>Press "Shift" and the respective worker button to remove a man from his post.</div>
             <div style="color: red;">NOTE!! THIS GAME MUST BE PLAYED WITH A KEYBOARD. 
-                THIS GAME IS ALSO A WORK IN PROGRESS.</div>
+                </div>
         </div>
 </html>
