@@ -173,7 +173,7 @@
 
 
             if((menCount + workerCount + farmerCount + soldierCount) ===0){
-                alert("GAME OVER.")
+                //alert("GAME OVER.")
             }
         }
         
@@ -269,7 +269,7 @@
                 }
             }
         }
-
+    
         function updateScroll() {
                 var element = document.getElementById("info");
                 element.scrollTop = element.scrollHeight;
@@ -313,8 +313,8 @@
                 createItem("buildings", "li", name);
             }
             else if(!buildingInProgress){
-                if(name === "Mill" && !millExists && gold >= 50){
-                    gold -= 50;
+                if(name === "Mill" && !millExists && gold >= 5){
+                    gold -= 5;
                     buildingInProgress = true;
                     document.getElementById("bar").style.visibility= "visible";
                     createItem("buildingsTBC", "li", "Mill", 7);
@@ -327,8 +327,8 @@
                         document.getElementById("bar").style.visibility= "hidden";
                     })
                 }
-                else if(name === "Watchtower" && !watchtowerExists && gold >= 1000){
-                    gold -= 1000;
+                else if(name === "Watchtower" && !watchtowerExists && gold >= 1){
+                    gold -= 1;
                     buildingInProgress = true;
                     document.getElementById("bar").style.visibility= "visible";
                     createItem("buildingsTBC", "li", "Watchtower", 8);
@@ -433,3 +433,26 @@
                 foodCount = 0;
             }
         }
+    //     const db = getDatabase();
+    //     const form = document.querySelector("#form");
+    //     const fe = document.getElementById("ff");
+    //     fe.innerHTML = "fe";
+    //     const postListRef = ref(db, 'posts');
+
+//     //     fe.addEventListener("submit", (e) => {
+//     //         e.preventDefault();
+//     //     });
+//     // const newPostRef = push(postListRef);
+//     // set(newPostRef, {
+//     // "user": "fay"
+// });
+
+const firebaseConfig = {
+    apiKey: "AIzaSyCUI5Ngr-Ih9LKEZ9l4Dq-6ocZvwhc8r00",
+    authDomain: "website-database-56159.firebaseapp.com",
+    projectId: "website-database-56159",
+    storageBucket: "website-database-56159.appspot.com",
+    messagingSenderId: "180368249258",
+    appId: "1:180368249258:web:2db386751a77ac80f61bd3",
+    measurementId: "G-90XYD19XCR"
+  };

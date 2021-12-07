@@ -1,0 +1,26 @@
+table {
+    border-style:double;
+    border-width: 5px;
+    width: 300px;
+    margin: auto;
+}
+#eventlog {
+    list-style-type: square;
+    font-style: italic;
+}
+#info {
+    font-size: 13px;
+    max-block-size: 200px; 
+    overflow: scroll;
+}
+#mid {
+    padding: 20px;
+}
+#left {
+    text-align: left;
+    min-width: 180px;
+}
+#upperItems, #lowerItems {
+    display: grid;
+    grid-template-columns: auto auto auto; 
+}

@@ -5,75 +5,76 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="game.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 </head>
 
-
-
 <body>
-    <div class="table-responsive-sm">
-        <table class='table' style='border: 1px solid black'>
-            <th style='text-align: left;'>
-                Time of Day: <span id="timeofday"></span>
-                <div>Time: <span id="time"></span>
+    <div>
+        <table>
+            <th id="left">
+                <div>Time: <span id="time"></span><br>
+                    Time of Day: <span id="timeofday"></span><br>
+                    Weather: <span id='weather'></span>
             </th>
-            <th style='text-align: center;'>
+            </th>
+            <th id="mid">
                 Day <span id="daynumber"></span></th>
-            <th style='padding: 15px; text-align: right;'>
-                Weather: <span id='weather'></span></th>
+
         </table>
     </div>
-    <div class="row">
-        <div class="col">
-            <ul>
+
+    <div id="upperItems">
+        <div>
+            <ul id="list1">
                 <li>Available Men: <span id='men'></span></li>
                 <li>Food: <span id='food'></span></li>
                 <li>Gold: <span id='gold'></span></li>
             </ul>
         </div>
-        <div class="col">
-            <ul>
+        <div>
+            <ul id="list2">
                 <li>Workers: <span id='workers'></span></li>
                 <li>Farmers: <span id='farmers'></span></li>
                 <li id="slist">Soldiers: <span id='soldiers'></span></li>
             </ul>
         </div>
-        <div class="col">
+        <div>
             <ul id="buildings">
             </ul>
         </div>
     </div>
     <hr>
-    <div class="row">
-        <div class="col">
+    <div id="lowerItems">
+        <div>
             <ul>
             </ul>
         </div>
-        <div class="col">
+        <div>
             <ul id="unitsTBC">
                 <progress id="bar2" style="width:40%; visibility: hidden;" value=0 max="50"> 32% </progress>
             </ul>
         </div>
-        <div class="col">
+        <div>
             <ul id="buildingsTBC">
                 <progress id="bar" style="width:40%; visibility: hidden;" value=0 max="50"> 32% </progress>
             </ul>
         </div>
     </div>
     <div class="card">
-        <div class="card-header font-weight-bold">Event Log</div>
-        <div class="card-body" id="info" style="font-size: 13px; max-block-size: 200px; overflow: scroll;">
-            <ul style="list-style-type: square; font-style: italic;" id="eventlog">
+        <div id="ff">Event Log</div>
+        <div id="info">
+            <ul id="eventlog">
 
             </ul>
         </div>
     </div>
+    <form id="form">
+        <input type="text" name="test">
+        <button>Testing</button>
+    </form>
 </body>
 <hr>
-<div class="container pt-3 pl-5 pr-5 " style="font-size: 13px;">
+<div>
     <div>Instructions: </div>
     <div>7 = build mill, 8 = build watchtower, w = assign worker,
         f = assign farmer, s = train soldier, p = pause game</div>
@@ -81,7 +82,24 @@
     <div style="color: red;">NOTE!! THIS GAME MUST BE PLAYED WITH A KEYBOARD.
     </div>
 </div>
+<script src="dist/bundle.js"></script>
+<script type="module">
+    // Import the functions you need from the SDKs you need
 
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-analytics.js";
+    import { getDatabase, ref, set, push } from "firebase/database";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    
+  </script>
 <script src="game.js"></script>
 
 </html>
