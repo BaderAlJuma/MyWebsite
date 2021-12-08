@@ -9,12 +9,22 @@ const firebaseConfig = {
   storageBucket: "website-database-56159.appspot.com",
   messagingSenderId: "180368249258",
   appId: "1:180368249258:web:2db386751a77ac80f61bd3",
-  measurementId: "G-90XYD19XCR"
+  measurementId: "${config.measurementId}"
 };
   
 const app = initializeApp(firebaseConfig);
 const db = new getDatabase();
 const dbRef = ref(db , "feedback/");
 
-// console.log(get(child(dbRef, "feedback")));
-push(dbRef, "the game is too slow to pick on the way out. Please include a save feature");
+document.getElementById("butt").addEventListener("click", processFeedback);
+
+function processFeedback(){
+  
+  const formbox = document.getElementById("feedbackBox");
+  document.getElementById("modal").style.display = "block";
+  if(formbox.value != ""){
+    const output = formbox.value;
+    push(dbRef, output);
+  }
+  
+}

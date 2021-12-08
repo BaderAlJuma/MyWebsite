@@ -24,3 +24,19 @@ table {
     display: grid;
     grid-template-columns: auto auto auto; 
 }
+#modal {
+    /* display: none; */
+    background-color: azure;
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -200px;
+    margin-left: -200px;
+    width: 400px;
+    height: 400px;
+}
+#modal div{
+    float:none
+}
+#modal h2{ text-align: center;}
