@@ -16,15 +16,18 @@ const app = initializeApp(firebaseConfig);
 const db = new getDatabase();
 const dbRef = ref(db , "feedback/");
 
-document.getElementById("butt").addEventListener("click", processFeedback);
+const feedbackButt = document.getElementById("butt")
+feedbackButt.addEventListener("click", processFeedback);
 
 function processFeedback(){
-  
-  const formbox = document.getElementById("feedbackBox");
-  document.getElementById("modal").style.display = "block";
-  if(formbox.value != ""){
-    const output = formbox.value;
-    push(dbRef, output);
+    const formbox = document.getElementById("feedbackBox");
+    // document.getElementById("modal").style.display = "block";
+    if(formbox.value != ""){
+      feedbackButt.disabled = true;
+      feedbackButt.innerHTML = "Sent!";
+      const output = formbox.value;
+      push(dbRef, output);
+
   }
   
 }

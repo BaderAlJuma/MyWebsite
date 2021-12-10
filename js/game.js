@@ -27,15 +27,17 @@ var time = setInterval(updateTag, 1000 / 60);
 eventsArray = [];
 
 window.addEventListener("keypress", resolveKey);
+document.getElementById("againButt").addEventListener("click", ()=> location.reload());
 //maps each key to a corresponding function.
 function resolveKey() {
     switch (event.key) {
-        case 'w': hireMan("worker"); break;
+        case 'w': hireMan("worker"), keyEffect(); break;
         case 'W': removeMan("worker"); break;
         case 'f': hireMan("farmer"); break;
         case 'F': removeMan("farmer"); break;
         case 'p': pauseToggle(); break;
         case 's': trainSoldier(); break;
+        case '`': endGame(); break;
         case '7': makeBuilding("Mill", true); break;
         case '8': makeBuilding("Watchtower", true); break;
         default: ;
@@ -173,10 +175,17 @@ function updateTag() {
 
 
     if ((menCount + workerCount + farmerCount + soldierCount) === 0) {
-        //alert("GAME OVER.")
+        endGame();
     }
 }
-
+function endGame(){
+    
+    document.getElementById("darkenPage").style.display = "block";
+    document.getElementById("modal").style.display = "block";
+    document.getElementById("feedbackBox").autofocus = true;
+    clearInterval(time);
+    pauseToggle = null; 
+}
 //a class to manage soldier information
 solId = 1;
 class Soldier {
@@ -269,6 +278,13 @@ function inflictDamage() {
         }
     }
 }
+function keyEffect(){
+    const text = document.getElementById("workerText");
+    text.style.color = "#3C415C";
+    document.addEventListener("keyup", timePlus(0.2, ()=> 
+    text.style.color = "#B4A5A5"));
+}
+
 
 function updateScroll() {
     var element = document.getElementById("info");
@@ -344,8 +360,6 @@ function makeBuilding(name, tbc = false) {
     }
 }
 
-
-
 function trainSoldier() {
     if (menCount > 0 && traineeCount === 0) {
         traineeCount++;
@@ -372,9 +386,12 @@ function trainSoldier() {
 function hireMan(occupation) {
     if (menCount > 0) {
         switch (occupation) {
-            case "worker": workerCount++; break;
             case "farmer": farmerCount++; break;
-            case "worker": workerCount++; break;
+            case "worker": {
+                document.getElementById('workerText').className="so";
+                document.getElementById('workerText').className="anime";
+                workerCount++;
+            } break;
             default: ;
         }
         menCount--;

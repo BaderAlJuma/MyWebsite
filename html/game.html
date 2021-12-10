@@ -24,6 +24,7 @@
 
     <div id="upperItems">
         <div>
+            <h3>Resources:</h3>
             <ul id="list1">
                 <li>Available Men: <span id='men'></span></li>
                 <li>Food: <span id='food'></span></li>
@@ -31,8 +32,9 @@
             </ul>
         </div>
         <div>
+            <h3>Assigned Men:</h3>
             <ul id="list2">
-                <li>Workers: <span id='workers'></span></li>
+                <li><span id="workerText">Workers: </span><span id='workers'></span></li>
                 <li>Farmers: <span id='farmers'></span></li>
                 <li id="slist">Soldiers: <span id='soldiers'></span></li>
             </ul>
@@ -59,6 +61,7 @@
             </ul>
         </div>
     </div>
+    <div id="darkenPage"></div>
     <div class="card">
         <div id="ff">Event Log</div>
         <div id="info">
@@ -67,13 +70,17 @@
             </ul>
         </div>
     </div>
-    <input type="text" id="feedbackBox">
-    <button id="butt">Testing</button>
+    
     <div id="modal">
-        <h2>This is the modal</h2>
+        <h2>"The struggle ends..."</h2>
+        <div>
+            <button>No More...</button>
+            <button id="againButt">Again!</button>
+         </div>
         <div id="feedbackElements">
-            <input type="text" id="feedbackBox">
-            <button id="butt">Testing</button>
+            
+            <textarea name="" id="feedbackBox" placeholder="Your feedback is optional but appreciated" rows="3"></textarea>
+            <button id="butt">Send Feedback</button>
         </div>
         
     </div>

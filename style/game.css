@@ -4,6 +4,19 @@ table {
     width: 300px;
     margin: auto;
 }
+body {
+    color: #B4A5A5;
+    background-color: #151515;
+}
+button {
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    cursor: pointer;
+}
+button:hover{
+    border-color: lightgray;
+}
 #eventlog {
     list-style-type: square;
     font-style: italic;
@@ -22,11 +35,14 @@ table {
 }
 #upperItems, #lowerItems {
     display: grid;
-    grid-template-columns: auto auto auto; 
+    grid-template-columns: auto auto auto;
 }
 #modal {
-    /* display: none; */
-    background-color: azure;
+    border-style:double;
+    border-width: 14px;
+    border-color: #301B3F;
+    display: none;
+    background-color: #B4A5A5;
     z-index: 1;
     position: absolute;
     top: 50%;
@@ -35,8 +51,48 @@ table {
     margin-left: -200px;
     width: 400px;
     height: 400px;
+    border-radius: 6px;    padding: 20px;
+    
 }
-#modal div{
-    float:none
+#modal h2{ text-align: center;
+    color: #151515}
+.anime {
+    animation: blinker 0.3s;
+
 }
-#modal h2{ text-align: center;}
+
+#modal textarea {
+    
+    margin: auto;
+    font-size: 15px;
+    resize: none;
+    display: block;
+    border: solid;
+    border-width: 2px;
+    width: 300px;
+    
+}
+#modal > div{
+    padding: 30px;
+    text-align: center;
+}
+#modal > div > button{
+    display: inline;
+    width: 40%;
+    margin: auto;
+}
+#modal #butt{
+    width: 308px;
+    display: block;
+    margin: auto;
+    margin-top: 5px;
+}
+#darkenPage {
+    display: none;
+    background-color: rgba(0,0,0,0.5);
+    position:fixed;
+    left:0;
+    top: 0;
+    width:100%;
+    height:100%;
+  }
