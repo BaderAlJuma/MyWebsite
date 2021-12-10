@@ -26,7 +26,7 @@
         <div>
             <h3>Resources:</h3>
             <ul id="list1">
-                <li>Available Men: <span id='men'></span></li>
+                <li><span id="menTag">Available Men: <span id='men'></span><span></span></span></li>
                 <li>Food: <span id='food'></span></li>
                 <li>Gold: <span id='gold'></span></li>
             </ul>
@@ -34,8 +34,8 @@
         <div>
             <h3>Assigned Men:</h3>
             <ul id="list2">
-                <li><span id="workerText">Workers: </span><span id='workers'></span></li>
-                <li>Farmers: <span id='farmers'></span></li>
+                <li><span id="workerTag">Workers: <span id='workers'></span> </span></li>
+                <li><span id="farmerTag">Farmers: <span id='farmers'></span></span></li>
                 <li id="slist">Soldiers: <span id='soldiers'></span></li>
             </ul>
         </div>
@@ -86,8 +86,8 @@
     </div>
 </body>
 <hr>
-<div>
-    <div>Instructions: </div>
+<div id="footer">
+    <h4>Instructions</h4>
     <div>7 = build mill, 8 = build watchtower, w = assign worker,
         f = assign farmer, s = train soldier, p = pause game</div>
     <div>Press "Shift" and the respective worker button to remove a man from his post.</div>

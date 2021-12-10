@@ -6,7 +6,9 @@ table {
 }
 body {
     color: #B4A5A5;
-    background-color: #151515;
+    /* background-color: #151515; */
+    background-image: url("/back.jpg");
+    
 }
 button {
     border-color: black;
@@ -33,9 +35,13 @@ button:hover{
     text-align: left;
     min-width: 180px;
 }
+ul {
+    list-style-type: none;
+}
 #upperItems, #lowerItems {
     display: grid;
     grid-template-columns: auto auto auto;
+    
 }
 #modal {
     border-style:double;
@@ -96,3 +102,6 @@ button:hover{
     width:100%;
     height:100%;
   }
+#footer {
+    text-align: center;
+}

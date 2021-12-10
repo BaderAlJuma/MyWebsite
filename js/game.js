@@ -31,7 +31,7 @@ document.getElementById("againButt").addEventListener("click", ()=> location.rel
 //maps each key to a corresponding function.
 function resolveKey() {
     switch (event.key) {
-        case 'w': hireMan("worker"), keyEffect(); break;
+        case 'w': hireMan("worker"); break;
         case 'W': removeMan("worker"); break;
         case 'f': hireMan("farmer"); break;
         case 'F': removeMan("farmer"); break;
@@ -278,11 +278,16 @@ function inflictDamage() {
         }
     }
 }
-function keyEffect(){
-    const text = document.getElementById("workerText");
-    text.style.color = "#3C415C";
-    document.addEventListener("keyup", timePlus(0.2, ()=> 
+function keyEffect(elementId, color){
+    const text = document.getElementById(elementId);
+    text.style.color = color;
+    document.addEventListener("keypress", timePlus(0.1, ()=> 
     text.style.color = "#B4A5A5"));
+    // document.addEventListener("keyup", ()=> {
+    //     text.style.color = "darkblue";
+    //     timePlus(0.1, ()=> text.style.color = "#B4A5A5");
+    // })
+    
 }
 
 
@@ -386,16 +391,19 @@ function trainSoldier() {
 function hireMan(occupation) {
     if (menCount > 0) {
         switch (occupation) {
-            case "farmer": farmerCount++; break;
+            case "farmer": {
+                farmerCount++;
+                keyEffect("farmerTag", "#3C415C");
+            }; break;
             case "worker": {
-                document.getElementById('workerText').className="so";
-                document.getElementById('workerText').className="anime";
                 workerCount++;
+                keyEffect("workerTag", "#3C415C");
             } break;
             default: ;
         }
         menCount--;
     }
+    else keyEffect("menTag", "red");
 }
 //function for removing men; adding them to "available men"
 function removeMan(occupation) {
