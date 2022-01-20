@@ -105,12 +105,19 @@ function updateTag() {
 
         starvationCountdown--;
         if (starvationCountdown <= 0) {
-            if (menCount > 0) menCount--;
-            else if (workerCount > 0) workerCount--;
-            else if (farmerCount > 0) farmerCount--;
+            if (menCount > 0) 
+            {menCount--;
+            keyEffect("menTag", "red");}
+            else if (workerCount > 0) 
+            {keyEffect("workerTag", "red");
+            workerCount--;}
+            else if (farmerCount > 0) 
+            {keyEffect("farmerTag", "red");
+            farmerCount--;}
             else if (soldierCount > 0) {
 
                 soldierBag[0].takeDamage(1000);
+                keyEffect("soldierTag", "red");
             }
             starvationCountdown = 60;
         }
@@ -120,6 +127,7 @@ function updateTag() {
         eventLog("No leader should let his people to starve to death...")
     }
     else if (starvation && foodCount > 0) starvation = false;
+    
     if (currentInvaders.orcs > 0) {
         if (invaderTick % 60 === 0) {
             currentWave = currentInvaders.orcs;
