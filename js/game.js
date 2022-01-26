@@ -1,7 +1,7 @@
 weather = "Clear";
 var gold = 0;
 var workerCount = 0;
-var foodCount = 0;
+var foodCount = 50;
 var farmerCount = 0;
 var menCount = 10;
 var soldierCount = 0;
@@ -117,7 +117,7 @@ function updateTag() {
             else if (soldierCount > 0) {
 
                 soldierBag[0].takeDamage(1000);
-                keyEffect("soldierTag", "red");
+                keyEffect("slist", "red");
             }
             starvationCountdown = 60;
         }
@@ -129,12 +129,21 @@ function updateTag() {
     else if (starvation && foodCount > 0) starvation = false;
     
     if (currentInvaders.orcs > 0) {
-        if (invaderTick % 60 === 0) {
+        if ((invaderTick % 60 === 0)) {
             currentWave = currentInvaders.orcs;
             if (soldierCount <= 0) {
-                if (menCount > 0) menCount--;
-                else if (workerCount > 0) workerCount--;
-                else if (farmerCount > 0) farmerCount--;
+                if (menCount > 0) {
+                    menCount--;
+                    keyEffect("menTag", "red");
+                }
+                else if (workerCount > 0) {
+                    workerCount--;
+                    keyEffect("workerTag", "red");
+                }
+                else if (farmerCount > 0) {
+                    farmerCount--;
+                    keyEffect("farmerTag", "red");
+                }
             }
             while (currentWave > 0 && soldierCount > 0) {
                 for (i in soldierBag) {
@@ -215,6 +224,7 @@ class Soldier {
                     document.getElementById(soldierBag[i].solId).remove();
                     soldierBag.splice(i, 1);
                     soldierCount--;
+                    keyEffect("slist", "red");
                 }
 
             }
@@ -228,8 +238,14 @@ function waves() {
     var timeForWatchtowerDetection = 14;
 
     timePlus(timeForWatchtowerDetection, () => {
-        if (watchtowerExists) eventLog(numberOfThem + " orc(s) are approaching your camp!");
-        timePlus(3, () => summonOrcs(numberOfThem, numberOfThem += 1));
+        if(Math.random() > 0.5){
+            if (watchtowerExists) eventLog(numberOfThem + " orc(s) are approaching your camp!");
+
+            timePlus(3, () => {
+                summonOrcs(numberOfThem);
+            });
+        }
+        numberOfThem += 1;
     }, 999999);
 
 }
@@ -290,7 +306,7 @@ function keyEffect(elementId, color){
     const text = document.getElementById(elementId);
     text.style.color = color;
     document.addEventListener("keypress", timePlus(0.1, ()=> 
-    text.style.color = "#B4A5A5"));
+    text.style.color = null));
     // document.addEventListener("keyup", ()=> {
     //     text.style.color = "darkblue";
     //     timePlus(0.1, ()=> text.style.color = "#B4A5A5");

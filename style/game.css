@@ -5,12 +5,7 @@ table {
     margin: auto;
 }
 body {
-    color: #B4A5A5;
-    /* text-shadow: 1px 1px red; */
-    
-    /* background-color: #151515; */
-    background-image: url("/back.jpg");
-    
+ 
 }
 button {
     border-color: black;
@@ -22,12 +17,13 @@ button:hover{
     border-color: lightgray;
 }
 #eventlog {
+    
     list-style-type: square;
     font-style: italic;
 }
 #info {
-    font-size: 13px;
-    max-block-size: 200px; 
+    font-size: 17px;
+    max-block-size: 500px; 
     overflow: scroll;
 }
 #mid {
@@ -45,11 +41,10 @@ ul {
     grid-template-columns: auto auto auto;
     
 }
-#modal {
-    outline: double 14px darkred;
-    border-color: darkred;
+#modal{
+    border-radius: 10px;
     display: none;
-    background-color: #B4A5A5;
+    background-color: white;
     z-index: 1;
     position: absolute;
     top: 50%;
@@ -86,6 +81,7 @@ ul {
     text-align: center;
 }
 #modal > div > button{
+    font-size: 16px;
     display: inline;
     width: 40%;
     margin: auto;
