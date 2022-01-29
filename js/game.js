@@ -1,4 +1,8 @@
 weather = "Clear";
+var totalTime = 60;
+var timePeriod = (totalTime /3)*60;
+var timePeriod1 = timePeriod*2;
+var timePeriod2 = timePeriod*3;
 var gold = 0;
 var workerCount = 0;
 var foodCount = 50;
@@ -78,12 +82,14 @@ function updateTag() {
     sixtyTicks = Math.trunc(clockTicks / 60);
     clockTicks++;
     //if blocks for time of day
-    if (clockTicks < 300) {
+    if (clockTicks ===timePeriod)consumeFood();
+    if (clockTicks < timePeriod) {
         timeOfDay = "Morning";
         weather = "Clear";
     }
-    else if (clockTicks < 600) {
-        if (clockTicks === 301) {
+    
+    else if (clockTicks < timePeriod1) {
+        if (clockTicks === timePeriod +1) {
             chanceOfStorms = Math.random();
             if (chanceOfStorms > 0.8) {
                 weather = "Stormy";
@@ -91,9 +97,10 @@ function updateTag() {
             }
         }
         timeOfDay = "Afternoon";
+        
 
     }
-    else if (clockTicks < 900) {
+    else if (clockTicks < timePeriod2) {
         timeOfDay = "Evening";
     }
     else {
@@ -161,7 +168,7 @@ function updateTag() {
 
         switch (timeOfDay) {
             case "Morning": produceFood(), produceGold(); break;
-            case "Afternoon": consumeFood(); break;
+            case "Afternoon": ; break;
             case "Evening": ; break;
             default: ; break;
         }
@@ -234,18 +241,18 @@ class Soldier {
     }
 }
 function waves() {
-    var numberOfThem = 1;
-    var timeForWatchtowerDetection = 14;
+    var numberOfThem = 0;
+    var timeForWatchtowerDetection = totalTime;
 
     timePlus(timeForWatchtowerDetection, () => {
-        if(Math.random() > 0.5){
+        numberOfThem += 1;
+        if(Math.random() > 0.8){
             if (watchtowerExists) eventLog(numberOfThem + " orc(s) are approaching your camp!");
 
             timePlus(3, () => {
                 summonOrcs(numberOfThem);
             });
         }
-        numberOfThem += 1;
     }, 999999);
 
 }
@@ -301,6 +308,9 @@ function inflictDamage() {
             }
         }
     }
+}
+function cl(){
+    window.close();
 }
 function keyEffect(elementId, color){
     const text = document.getElementById(elementId);
@@ -458,17 +468,17 @@ function buy(price) {
 }
 //produces food each time its called
 function produceFood() {
-    if (weather == "Stormy") foodCount = foodCount + farmerCount;
-    else foodCount = foodCount + farmerCount * 2;
+    if (weather == "Stormy") foodCount = foodCount + Math.ceil(farmerCount/2);
+    else foodCount = foodCount + farmerCount;
 
     if (millExists) {
-        foodCount += farmerCount;
+        foodCount += Math.round(farmerCount*1.5);
     }
 }
 
 //subtract food based on all active men
 function consumeFood() {
-    foodCount = foodCount - (menCount + workerCount + farmerCount + soldierCount);
+    foodCount = foodCount - 2*(menCount + workerCount + farmerCount + soldierCount);
     if (foodCount < 0) {
         foodCount = 0;
     }
