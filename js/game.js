@@ -368,8 +368,8 @@ function makeBuilding(name, tbc = false) {
         createItem("buildings", "li", name);
     }
     else if (!buildingInProgress) {
-        if (name === "Mill" && !millExists && gold >= 5) {
-            gold -= 5;
+        if (name === "Mill" && !millExists && gold >= 2000) {
+            gold -= 2000;
             buildingInProgress = true;
             document.getElementById("bar").style.visibility = "visible";
             createItem("buildingsTBC", "li", "Mill", 7);
@@ -382,8 +382,8 @@ function makeBuilding(name, tbc = false) {
                 document.getElementById("bar").style.visibility = "hidden";
             })
         }
-        else if (name === "Watchtower" && !watchtowerExists && gold >= 1) {
-            gold -= 1;
+        else if (name === "Watchtower" && !watchtowerExists && gold >= 3000) {
+            gold -= 3000;
             buildingInProgress = true;
             document.getElementById("bar").style.visibility = "visible";
             createItem("buildingsTBC", "li", "Watchtower", 8);
@@ -457,7 +457,7 @@ function removeMan(occupation) {
 
 }
 function produceGold() {
-    gold = gold + (workerCount * 2);
+    gold = gold + (workerCount);
 }
 function buy(price) {
     if (price <= gold) {
