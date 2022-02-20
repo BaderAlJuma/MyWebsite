@@ -31,30 +31,36 @@ var time = setInterval(updateTag, 1000 / 60);
 eventsArray = [];
 
 window.addEventListener("keypress", resolveKey);
+
 document.getElementById("againButt").addEventListener("click", ()=> location.reload());
 //maps each key to a corresponding function.
 function resolveKey() {
     switch (event.key) {
-        case 'w': hireMan("worker"); break;
-        case 'W': removeMan("worker"); break;
-        case 'f': hireMan("farmer"); break;
-        case 'F': removeMan("farmer"); break;
-        case 'p': pauseToggle(); break;
-        case 's': trainSoldier(); break;
-        case '`': endGame(); break;
-        case '7': makeBuilding("Mill", true); break;
-        case '8': makeBuilding("Watchtower", true); break;
-        default: ;
-    }
+    case 'w': hireMan("worker"); break;
+    case 'W': removeMan("worker"); break;
+    case 'f': hireMan("farmer"); break;
+    case 'F': removeMan("farmer"); break;
+    case 'p': pauseToggle(); break;
+    case 's': trainSoldier(); break;
+    case '`': endGame(); break;
+    case '7': makeBuilding("Mill", true); break;
+    case '8': makeBuilding("Watchtower", true); break;
+    default: ;
+}
 }
 var ticks = 0;
 var invaderTick = 0;
 var clockTicks = 0;
 var sixtyTicks = 0;
 var dayNumber = 1;
-var starvationCountdown = (60 * 5);
+var starvationCountdown = (60 * 41);
 timeOfDay = "Morning";
 function updateTag() {
+    
+    
+    ticks++;
+    sixtyTicks = Math.trunc(clockTicks / 60);
+    clockTicks++;
     //check for events that end on the current tick and execute the
     //respective function.  
     for (i in eventsArray) {
@@ -78,9 +84,7 @@ function updateTag() {
         progress = 0;
     }
 
-    ticks++;
-    sixtyTicks = Math.trunc(clockTicks / 60);
-    clockTicks++;
+    
     //if blocks for time of day
     if (clockTicks ===timePeriod)consumeFood();
     if (clockTicks < timePeriod) {
@@ -330,8 +334,8 @@ function updateScroll() {
     element.scrollTop = element.scrollHeight;
 }
 //variable for max value of progress bar with a funcion that activates the progress bar animation
-maxProgress = 10;
-maxProgress2 = 2;
+maxProgress = 120;
+maxProgress2 = 40;
 progress = 0;
 progress2 = 0;
 document.getElementById("bar2").max = maxProgress2;
@@ -368,17 +372,18 @@ function makeBuilding(name, tbc = false) {
         createItem("buildings", "li", name);
     }
     else if (!buildingInProgress) {
-        if (name === "Mill" && !millExists && gold >= 2000) {
-            gold -= 2000;
+        if (name === "Mill" && !millExists && gold >= 2) {
+            gold -= 2;
             buildingInProgress = true;
             document.getElementById("bar").style.visibility = "visible";
             createItem("buildingsTBC", "li", "Mill", 7);
-            timePlus(1, activateBar, 10);
-            timePlus(11, () => {
+            timePlus(1, activateBar, 120);
+            timePlus(121, () => {
                 millExists = true;
                 buildingInProgress = false;
                 makeBuilding("Mill");
                 document.getElementById(7).remove();
+                document.getElementById("aMill").remove();
                 document.getElementById("bar").style.visibility = "hidden";
             })
         }
@@ -387,12 +392,13 @@ function makeBuilding(name, tbc = false) {
             buildingInProgress = true;
             document.getElementById("bar").style.visibility = "visible";
             createItem("buildingsTBC", "li", "Watchtower", 8);
-            timePlus(1, activateBar, 10);
-            timePlus(11, () => {
+            timePlus(1, activateBar, 120);
+            timePlus(121, () => {
                 watchtowerExists = true;
                 buildingInProgress = false;
                 makeBuilding("Watchtower");
                 document.getElementById(8).remove();
+                document.getElementById("aWatch").remove();
                 document.getElementById("bar").style.visibility = "hidden";
             })
         }
@@ -407,8 +413,8 @@ function trainSoldier() {
         document.getElementById("bar2").style.visibility = "visible";
         createItem("unitsTBC", "div", "Soldier " + solId, "sol");
 
-        timePlus(1, activateBar2, 2);
-        timePlus(3, () => {
+        timePlus(1, activateBar2, 40);
+        timePlus(41, () => {
             soldierCount++;
             traineeCount = 0;
             progress2 = 0;
@@ -468,17 +474,17 @@ function buy(price) {
 }
 //produces food each time its called
 function produceFood() {
-    if (weather == "Stormy") foodCount = foodCount + Math.ceil(farmerCount/2);
-    else foodCount = foodCount + farmerCount;
+    if (weather == "Stormy") foodCount = foodCount + Math.ceil(farmerCount/4);
+    else foodCount = foodCount + Math.ceil(farmerCount/3);
 
     if (millExists) {
-        foodCount += Math.round(farmerCount*1.5);
+        foodCount += farmerCount;
     }
 }
 
 //subtract food based on all active men
 function consumeFood() {
-    foodCount = foodCount - 2*(menCount + workerCount + farmerCount + soldierCount);
+    foodCount = foodCount - 4*(menCount + workerCount + farmerCount + soldierCount);
     if (foodCount < 0) {
         foodCount = 0;
     }
