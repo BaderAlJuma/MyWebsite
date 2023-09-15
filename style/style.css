@@ -7,7 +7,9 @@ and open the template in the editor.
     Created on : Apr 9, 2019, 11:52:09 AM
     Author     : morpheous
 */
-
+h1, h2, h3, h4{
+    font-family: "Bagnard";
+}
 nav {
     background-color: black;
 }
@@ -25,7 +27,7 @@ hr {
     font-weight: bold;
 }
 .jumbotron.text-md-left{
-  background-image: url("p.jpg");
+  background-image: url("/media/p.jpg");
   background-size: cover;
   color: white;
       
@@ -33,6 +35,11 @@ hr {
 .container {
     background-color: white;
        
+}
+#core{
+    background-color: rgb(20, 21, 27);
+color: white;
+
 }
 #reg {
     font-weight: bold;
