@@ -27,7 +27,7 @@ hr {
     font-weight: bold;
 }
 .jumbotron.text-md-left{
-  background-image: url("/media/p.jpg");
+  background-image: url("../media/p.jpg");
   background-size: cover;
   color: white;
       
